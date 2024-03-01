@@ -1,0 +1,85 @@
+import tkinter as tk
+from tkinter import *
+from tkinter import messagebox
+
+window = tk.Tk()
+window.title("Dim Sum Game")
+window.geometry("300x500")
+
+def start_game():
+    main_screen.pack()
+
+def open_instructions():
+    main_screen.pack_forget()
+    instructions_frame.pack()
+
+def open_main():
+    instructions_frame.pack_forget()
+    story_frame.pack_forget()
+    scan_cards_frame.pack_forget()
+    main_screen.pack()
+
+def open_story():
+    main_screen.pack_forget()
+    story_frame.pack()
+
+def scan_cards():
+    story_frame.pack_forget()
+    scan_cards_frame.pack()
+    
+def back_to_home_confirm():
+    result = messagebox.askquestion("Confirmation", "Are you sure you want to go back to home?")
+    if result == 'yes':
+        scan_cards_frame.pack_forget()
+        open_main()
+
+# Main screen 
+main_screen = tk.Frame(window, bg="#FBFAED")
+main_screen.pack(padx=20, pady=20)
+
+title_label = tk.Label(main_screen, text="The Dim Sum Game", font=("Helvetica", 24)).pack(pady=10)
+start_button = tk.Button(main_screen, text="Play", command=open_story).pack(pady=20)
+instructions_button = tk.Button(main_screen, text="Instructions", command=open_instructions).pack()
+
+# Instructions Screen
+instructions_frame = tk.Frame(window, bg="#FBFAED")
+instructions_label = tk.Label(instructions_frame, text="Instructions", font=("Helvetica", 24))
+instructions_frame.pack(pady=10)
+
+instructions_text = """
+Welcome to the Dim Sum Game!
+
+How to play:
+- Choose your wrapper, vegetables, or protein of your choice, and a cooking method 
+- Tap each of the card on the reader 
+- Wait for the machine to respond 
+- Tadaa! You have made a dish. 
+"""
+
+instructions_text_label = tk.Label(instructions_frame, text=instructions_text).pack(pady=10)
+back_button = tk.Button(instructions_frame, text="Back", command=open_main).pack(pady=10)
+
+# Story screen
+story_frame = tk.Frame(window)
+story_label = tk.Label(story_frame, text="Storyline", font=("Helvetica", 24))
+story_frame.pack(pady=10)
+
+story_text = """
+Once upon a time, in a bustling city filled with the aroma of delicious food, there was a quaint little dim sum restaurant called "Dim Sum Delights." The restaurant was known far and wide for its exquisite dim sum dishes, each bursting with flavor and creativity. 
+
+One day, you decided to visit Dim Sum Delights for a fun lunch outing. As you sat down at their table, they noticed a unique set of cards placed in front of them. The cards were adorned with colorful illustrations of various dim sum ingredients like shrimp, pork, and mushrooms. 
+
+Now, tap your cards to explore the world of dim sum... 
+"""
+story_text_label = tk.Label(story_frame, text=story_text, wraplength=250).pack(pady=10)
+continue_button = tk.Button(story_frame, text="Continue", command=scan_cards).pack(pady=10)
+
+# Scan card screen
+scan_cards_frame = tk.Frame(window)
+scan_cards_label = tk.Label(scan_cards_frame, text="Storyline", font=("Helvetica", 24))
+scan_cards_frame.pack(pady=10)
+
+back_button = tk.Button(scan_cards_frame, text="Back to Home", command=back_to_home_confirm)
+
+open_main()
+window.mainloop()

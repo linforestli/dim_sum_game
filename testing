@@ -61,7 +61,6 @@ back_button = tk.Button(instructions_frame, text="Back", command=open_main).pack
 
 # Story screen
 story_frame = tk.Frame(window)
-story_label = tk.Label(story_frame, text="Storyline", font=("Helvetica", 24))
 story_frame.pack(pady=10)
 
 story_text = """
@@ -76,10 +75,25 @@ continue_button = tk.Button(story_frame, text="Continue", command=scan_cards).pa
 
 # Scan card screen
 scan_cards_frame = tk.Frame(window)
-scan_cards_label = tk.Label(scan_cards_frame, text="Storyline", font=("Helvetica", 24))
 scan_cards_frame.pack(pady=10)
 
-back_button = tk.Button(scan_cards_frame, text="Back to Home", command=back_to_home_confirm)
+scan_cards_label = tk.Label(scan_cards_frame, text="Tap to scan", wraplength=250).pack(pady=10)
+back_button = tk.Button(scan_cards_frame, text="Back to Home", command=back_to_home_confirm).pack(pady=10)
+
+# Wrapper box
+wrapper_box = tk.Frame(scan_cards_frame, height=50, width=50)
+wrapper_box.pack(pady=10)
+
+# Protein box
+protein_box = tk.Frame(scan_cards_frame, height=50, width=50)
+protein_box.pack(pady=10)
+
+# Vegetables box
+vegetable_box = tk.Frame(scan_cards_frame, height=50, width=50)
+vegetable_box.pack(pady=10)
+
+
+
 
 open_main()
 window.mainloop()

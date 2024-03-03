@@ -84,6 +84,7 @@ back_button = tk.Button(scan_cards_frame, text="Back to Home", command=back_to_h
 wrapper_box = tk.Frame(scan_cards_frame, height=50, width=50)
 wrapper_box.pack(pady=10)
 
+
 # Protein box
 protein_box = tk.Frame(scan_cards_frame, height=50, width=50)
 protein_box.pack(pady=10)
@@ -91,6 +92,7 @@ protein_box.pack(pady=10)
 # Vegetables box
 vegetable_box = tk.Frame(scan_cards_frame, height=50, width=50)
 vegetable_box.pack(pady=10)
+
 
 
 

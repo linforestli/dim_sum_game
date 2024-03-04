@@ -47,6 +47,8 @@ main_screen = tk.Frame(window, bg="#FBFAED")
 main_screen.pack(padx=20, pady=20)
 
 title_image = tk.PhotoImage(file="final cards/header.png")
+title_label = tk.Label(main_screen, image=title_image, background=background_color)
+title_label.pack(pady=10)
 
 #title_label = tk.Label(main_screen, text="The Dim Sum Game", background=background_color, font=("Roboto", "62")).pack(pady=10)
 start_button = tk.Button(main_screen, text="Play", command=open_story).pack(side=LEFT, pady=20)

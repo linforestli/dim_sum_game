@@ -9,6 +9,12 @@ window.configure(bg=background_color)
 window.title("Dim Sum Game")
 window.geometry("1500x800")
 
+back_btn= PhotoImage(file='final cards/back_button.png')
+resized_back_btn = back_btn.subsample(2, 2)
+
+start_btn = PhotoImage(file='final cards/start_button.png')
+resized_start_btn = start_btn.subsample(2,2)
+
 def start_game():
     main_screen.pack()
 
@@ -51,7 +57,7 @@ title_label = tk.Label(main_screen, image=title_image, background=background_col
 title_label.pack(pady=10)
 
 #title_label = tk.Label(main_screen, text="The Dim Sum Game", background=background_color, font=("Roboto", "62")).pack(pady=10)
-start_button = tk.Button(main_screen, text="Play", command=open_story).pack(side=LEFT, pady=20)
+start_button = tk.Button(main_screen, text="Play", command=open_story, image=resized_start_btn, borderwidth=None).pack(side=LEFT, pady=20)
 instructions_button = tk.Button(main_screen, text="Instructions", command=open_instructions).pack(side=LEFT, pady=20)
 
 # Instructions Screen
@@ -71,7 +77,7 @@ How to play:
 """
 
 instructions_text_label = tk.Label(instructions_frame, text=instructions_text, background=background_color, font=("Roboto", "24"), justify=LEFT).pack(pady=10)
-back_button = tk.Button(instructions_frame, text="Back", command=open_main).pack(pady=10)
+back_button = tk.Button(instructions_frame, background=background_color, image=resized_back_btn , text="Back", command=open_main, borderwidth=0).pack(pady=10)
 
 # Story screen
 story_frame = tk.Frame(window, background=background_color)
@@ -138,7 +144,7 @@ method_image_label = tk.Label(vegetable_box, image=method_image, background=back
 method_image_label.pack()
 
 # Back to home button
-back_button = tk.Button(scan_cards_frame, text="Back to Home", command=back_to_home_confirm).pack(pady=10)
+back_button = tk.Button(scan_cards_frame, text="Back to Home", command=back_to_home_confirm, image=resized_back_btn).pack(pady=10)
 
 # Continue to results: this will be based on conditional when card is scaneed
 continue_button = tk.Button(scan_cards_frame, text="Continue", command=open_results).pack(pady=10)

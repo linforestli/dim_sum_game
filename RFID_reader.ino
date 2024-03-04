@@ -5,11 +5,13 @@
 #define SS_PIN          10         
 MFRC522 mfrc522(SS_PIN, RST_PIN);
 
-const byte card1UID[] = {0xA3, 0xD8, 0x56, 0x17};
-const byte card2UID[] = {0xE4, 0x60, 0x0B, 0x1E};
+const byte bambooshootUID[] = {0xA3, 0xD8, 0x56, 0x17};
+const byte shrimpUID[] = {0xE4, 0x60, 0x0B, 0x1E};
+const byte steamUID[] = {0x93, 0x28, 0x93, 0x24};
 
 bool card1Scanned = false;
 bool card2Scanned = false;
+bool card3Scanned = false;
 
 void setup() {
     Serial.begin(9600);
@@ -17,8 +19,7 @@ void setup() {
     SPI.begin();
     mfrc522.PCD_Init();
     delay(4);
-    mfrc522.PCD_DumpVersionToSerial();
-    Serial.println(F("Mix the ingredients now!"));
+    // mfrc522.PCD_DumpVersionToSerial();
 }
 
 void loop() {
@@ -26,27 +27,32 @@ void loop() {
         return;
     }
 
-    if (isCardUIDMatch(mfrc522.uid.uidByte, card1UID, mfrc522.uid.size)) {
+    if (isCardUIDMatch(mfrc522.uid.uidByte, bambooshootUID, mfrc522.uid.size)) {
         if (!card1Scanned) {
-            Serial.println(F("Added Tapioca Starch!"));
+            Serial.println(F("bambooshoot"));
             card1Scanned = true;
         }
-    } else if (isCardUIDMatch(mfrc522.uid.uidByte, card2UID, mfrc522.uid.size)) {
+    } else if (isCardUIDMatch(mfrc522.uid.uidByte, shrimpUID, mfrc522.uid.size)) {
         if (!card2Scanned) {
-            Serial.println(F("Added Shrimp!"));
+            Serial.println(F("shrimp"));
             card2Scanned = true;
         }
-    }
+    } else if (isCardUIDMatch(mfrc522.uid.uidByte, steamUID, mfrc522.uid.size)) {
+        if (!card3Scanned) {
+            Serial.println(F("steam"));
+            card3Scanned = true;
+        }
 
-    if (card1Scanned && card2Scanned) {
-        Serial.println(F("You cooked Har Gow!"));
+    if (card1Scanned && card2Scanned && card3Scanned) {
+        // Serial.println(F("You cooked Har Gow!"));
         card1Scanned = false;
         card2Scanned = false;
+        card3Scanned = false;
     }
 
-    mfrc522.PICC_HaltA(); // Halt PICC
-    mfrc522.PCD_StopCrypto1(); // Stop encryption on PCD
-}
+    mfrc522.PICC_HaltA();
+    mfrc522.PCD_StopCrypto1(); 
+}}
 
 bool isCardUIDMatch(byte *cardUID, const byte *knownUID, byte size) {
     for (byte i = 0; i < size; i++) {

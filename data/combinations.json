@@ -1,0 +1,16 @@
+{
+  "Hargow": ["Tapioca wrapper", "Bamboo shoots", "Shrimp", "Steamed"],
+  "Siumai1": ["Egg wrapper", "Scallions", "Pork", "Steamed"],
+  "Siumai2": ["Egg wrapper", "Ginger", "Pork", "Steamed"],
+  "Siumai3": ["Egg wrapper", "Mushroom", "Pork", "Steamed"],
+  "Xiaolongbao": ["Wheat wrapper", "Pork", "Steamed"],
+  "Lo Mai Gai1": ["Lotus leaf", "Glutinous rice", "Chicken", "Steamed"],
+  "Lo Mai Gai2": ["Lotus leaf", "Mushroom", "Chicken", "Steamed"],
+  "Changfen1": ["Rice noodles", "Dough fritter", "Shrimp", "Steamed"],
+  "Changfen2": ["Rice noodles", "Dough fritter", "Beef", "Steamed"],
+  "Tofu skin roll1": ["Bean curd", "Shrimp", "Steamed"],
+  "Tofu skin roll2": ["Bean curd", "Beef", "Steamed"],
+  "Radish cake": ["Rice flour", "Shredded radish", "Steamed"],
+  "Egg tart": ["Egg wrapper", "Egg custard", "Baked"],
+  "Sesame ball": ["Glutinous rice", "Beans", "Sesame seed", "Fried"]
+}

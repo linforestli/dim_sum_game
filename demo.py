@@ -2,43 +2,38 @@ import tkinter as tk
 from tkinter import messagebox
 import serial  # install pyserial to make it work
 import threading
-import queue  # Import the queue module
+import queue
 
 # Set up the port. Change it accordingly to match with your system.
 ser = serial.Serial('/dev/cu.usbmodem2101', 9600, timeout=1)
 
-# Placeholder for card scan data and icons (make sure to adjust to your actual icons)
 card_icons = {
     "bambooshoot": "bambooshoot.png",
     "shrimp": "shrimp.png",
     "steam": "steam.png",
 }
 
-# List to store scanned cards
 scanned_cards = []
-
-# Popup window for card scanning
 scan_popup = None
-
-# Create a thread-safe queue for communication between threads
 data_queue = queue.Queue()
+
 
 def listen_for_card_scans():
     while True:
         if ser.in_waiting:
             line = ser.readline().decode('utf-8').strip()
-            if line:  # Assuming line contains card identification
-                data_queue.put(line)  # Put the scanned data into the queue
+            if line:
+                data_queue.put(line)
+
 
 def check_queue():
     try:
-        # Try to get data from the queue without blocking
         card_data = data_queue.get(block=False)
         on_card_scanned(card_data)
     except queue.Empty:
-        # No data in the queue
         pass
-    window.after(100, check_queue)  # Check the queue again after 100 ms
+    window.after(100, check_queue)
+
 
 def on_card_scanned(card_data):
     if card_data in scanned_cards:  # Prevent duplicate scans

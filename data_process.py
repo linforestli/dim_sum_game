@@ -36,9 +36,8 @@ def process_card_scans():
             if card_data:
                 if card_data not in scanned_cards:
                     scanned_cards.append(card_data)
-                    # print(f"Card Scanned: {card_data}")
+                    print(f"Card Scanned: {card_data}")
                     check_combination()
-                    return card_data
                 else:
                     print("Card already scanned.")
         except queue.Empty:
@@ -62,19 +61,16 @@ def check_combination():
     for dish, ingredients in combinations.items():
         ingredient_set = set(ingredients)
         if ingredient_set <= scanned_set:
-            # print(f"You've made a {dish}!")
+            print(f"You've made a {dish}!")
             scanned_cards.clear()
             found_valid_combination = True
-            return dish
 
     if not found_valid_combination and total_scanned == 4:
-        # print("This combination doesn't work.")
+        print("This combination doesn't work.")
         scanned_cards.clear()
-        return "no match"
 
 
 # thread starts
 thread = threading.Thread(target=listen_for_card_scans, daemon=True)
 thread.start()
-
 process_card_scans()

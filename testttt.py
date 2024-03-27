@@ -61,7 +61,6 @@ def check_queue():
     try:
         card_uid = data_queue.get(block=False)
         card_data = ingredient_map.get(card_uid.upper(), None)
-        print(card_data)
         on_card_scanned(card_data)
     except queue.Empty:
         pass
@@ -73,23 +72,23 @@ def on_card_scanned(card_data):
         messagebox.showwarning("Warning", "Card already scanned!")
         return
     scanned_cards.append(card_data)
-    if scan_popup:
-        update_popup_with_scan(card_data)
-        if len(scanned_cards) >= 4 and scan_popup:  # Changed to >= to match new logic
+    if scan_card_frame:
+        update_frame_with_scan(card_data)
+        if len(scanned_cards) >= 4 and scan_card_frame:  # Changed to >= to match new logic
             show_combine_button()
 
 
-def update_popup_with_scan(card_data):
+def update_frame_with_scan(card_data):
     if card_data in icon_map:
         icon_path = icon_map[card_data]
         icon = tk.PhotoImage(file=icon_path)
-        label = tk.Label(scan_popup, text=card_data, image=icon, compound='left')
+        label = tk.Label(scan_card_frame, text=card_data, image=icon, compound='left')
         label.image = icon  # Keep a reference!
         label.pack()
 
 
 def show_combine_button():
-    combine_button = tk.Button(scan_popup, text="Cook!", command=check_combination)
+    combine_button = tk.Button(scan_card_frame, text="Cook!", command=check_combination)
     combine_button.pack()
 
 
@@ -112,16 +111,19 @@ def check_combination():
         ingredient_set = set(ingredients)
         print(ingredient_set)
         if ingredient_set == scanned_set:
+            # TODO: you can choose to initialize your result frame here
             messagebox.showinfo("Success", f"You've made a {dish}!")
             scanned_cards.clear()
             found_valid_combination = True
             break  # Exit the loop after finding a valid combination
 
     if not found_valid_combination and total_scanned == 4:
+        # TODO: in case failed
         messagebox.showinfo("Result", "This combination doesn't work.")
         scanned_cards.clear()
 
-def start_game():
+# TODO: update the scan card frame initialization
+def start_scan():
     global scanned_cards, scan_popup
     scanned_cards.clear()  # Reset scanned cards
     scan_popup = tk.Toplevel(window)

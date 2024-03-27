@@ -56,7 +56,6 @@ title_image = tk.PhotoImage(file="final cards/header.png")
 title_label = tk.Label(main_screen, image=title_image, background=background_color)
 title_label.pack(pady=10)
 
-#title_label = tk.Label(main_screen, text="The Dim Sum Game", background=background_color, font=("Roboto", "62")).pack(pady=10)
 start_button = tk.Button(main_screen, text="Play", command=open_story, image=resized_start_btn, borderwidth=None).pack(side=LEFT, pady=20)
 instructions_button = tk.Button(main_screen, text="Instructions", command=open_instructions).pack(side=LEFT, pady=20)
 

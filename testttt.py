@@ -1,12 +1,13 @@
 import tkinter as tk
 from tkinter import messagebox
+from tkinter import *
 import serial  # install pyserial to make it work
 import threading
 import queue
 import csv
 import json
 
-# Set up the port. Change it accordingly to match with your system.
+# Set up the port
 ser = serial.Serial('/dev/cu.usbmodem2101', 9600, timeout=1)
 
 card_icons = {
@@ -32,12 +33,21 @@ scanned_cards = []
 scan_popup = None
 data_queue = queue.Queue()
 
+# Set up GUI
+background_color = "#FBFAED"
+
 def open_instructions():
-    instruction_window = tk.Toplevel(window)
-    instruction_window.title("Instructions")
-    instruction_window.geometry("600x400")
-    tk.Label(instruction_window, text="Instructions on how to play the game...").pack(pady=20)
-    tk.Button(instruction_window, text="Back", command=instruction_window.destroy).pack()
+    main_screen.pack_forget()
+    instructions_frame.pack()
+
+def open_main():
+    instructions_frame.pack_forget()
+    story_frame.pack_forget()
+    scan_cards_frame.pack_forget()
+    results_frame.pack_forget()
+    main_screen.pack()
+
+# Set up functions for game mechanism
 
 def listen_for_card_scans():
     while True:
@@ -141,12 +151,37 @@ window = tk.Tk()
 window.title("Dim Sum Game")
 window.geometry("1500x800")
 
-# Start game button
-start_button = tk.Button(window, text="Start Game", command=start_game)
-start_button.pack(pady=20)
+# Main screen 
+main_screen = tk.Frame(window, bg="#FBFAED")
+main_screen.pack(padx=20, pady=20)
 
-instruction_button = tk.Button(window, text="Instructions", command=open_instructions)
-instruction_button.pack(pady=20)
+title_image = tk.PhotoImage(file="final cards/header.png")
+title_label = tk.Label(main_screen, image=title_image, background=background_color)
+title_label.pack(pady=10)
+
+start_button = tk.Button(main_screen, text="Play", command=open_story, image=resized_start_btn, borderwidth=None).pack(side=LEFT, pady=20)
+instructions_button = tk.Button(main_screen, text="Instructions", command=open_instructions).pack(side=LEFT, pady=20)
+
+
+# Instructions Screen
+instructions_frame = tk.Frame(window, background=background_color)
+instructions_frame.pack(expand=TRUE, pady=10)
+instructions_label = tk.Label(instructions_frame, text="Instructions", font=("Roboto", "32"))
+instructions_label.pack(expand=TRUE, pady=10)
+
+instructions_text = """
+Welcome to the Dim Sum Game!
+
+How to play:
+1. Choose your wrapper, vegetables, or protein of your choice, and a cooking method 
+2. Tap each of the card on the reader 
+3. Wait for the machine to respond 
+4. Tadaa! You have made a dish. 
+"""
+
+instructions_text_label = tk.Label(instructions_frame, text=instructions_text, background=background_color, font=("Roboto", "24"), justify=LEFT).pack(pady=10)
+back_button = tk.Button(instructions_frame, background=background_color, image=resized_back_btn , text="Back", command=open_main, borderwidth=0).pack(pady=10)
+
 
 # Start listening for card scans in a separate thread
 thread = threading.Thread(target=listen_for_card_scans, daemon=True)

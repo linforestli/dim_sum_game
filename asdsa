@@ -1,63 +1,54 @@
 import tkinter as tk
+from PIL import Image, ImageTk
 
-def show_instructions():
-    main_frame.pack_forget()
-    instructions_frame.pack()
+def zoom_image(image_label, image, scale_factor=1.0, duration=1000):
+    width, height = image.width(), image.height()
+    target_width, target_height = int(width * scale_factor), int(height * scale_factor)
+    
+    # Create a resized image
+    resized_image = image.resize((target_width, target_height), Image.ANTIALIAS)
+    resized_photo = ImageTk.PhotoImage(resized_image)
+    
+    # Update the image label with the resized image
+    image_label.configure(image=resized_photo)
+    image_label.image = resized_photo
+    
+    if scale_factor < 1.0:
+        # Continue zooming in until scale_factor reaches 1.0
+        root.after(duration, zoom_image, image_label, image, scale_factor + 0.02, duration)
+    
+def init_results_frame():
+    results_frame.pack(pady=10)
+    
+    # Start the zoom animation for the results image
+    zoom_image(results_image_label, results_image, 1.0, 10)
 
-def start_game():
-    main_frame.pack_forget()
-    game_frame.pack()
-
-def back_to_main():
-    instructions_frame.pack_forget()
-    main_frame.pack()
-
+# Your existing code
 root = tk.Tk()
-root.title("Dim Sum Adventure")
+root.title("Animation Example")
 
-# Main Screen
-main_frame = tk.Frame(root)
-main_frame.pack(padx=20, pady=20)
+background_color = "white"
 
-title_label = tk.Label(main_frame, text="Dim Sum Adventure", font=("Helvetica", 24))
-title_label.pack(pady=10)
+results_frame = tk.Frame(root, background=background_color)
+results_label = tk.Label(results_frame, text="Tadaa!", font=("Roboto", 32))
+results_label.pack()
 
-instructions_button = tk.Button(main_frame, text="Instructions", command=show_instructions)
-instructions_button.pack(pady=10)
-
-start_game_button = tk.Button(main_frame, text="Start Game", command=start_game)
-start_game_button.pack(pady=10)
-
-# Instructions Screen
-instructions_frame = tk.Frame(root)
-
-instructions_label = tk.Label(instructions_frame, text="Instructions", font=("Helvetica", 24))
-instructions_label.pack(pady=10)
-
-instructions_text = """
-Welcome to the Dim Sum Adventure game!
-
-How to play:
-- Tap on the ingredient cards to explore different dim sum dishes.
-- Learn about the ingredients and history of each dish.
-- Enjoy the culinary adventure with your friends!
+results_text = """
+You've made [dish name]!
 """
+results_text_label = tk.Label(results_frame, text=results_text, wraplength=1000, background=background_color, font=("Roboto", "16"))
+results_text_label.pack(pady=10)
 
-instructions_text_label = tk.Label(instructions_frame, text=instructions_text)
-instructions_text_label.pack(pady=10)
+results_image = Image.open("final cards/hargow.png")
+results_image_label = tk.Label(results_frame, image=None)
+results_image_label.pack()
 
-back_button = tk.Button(instructions_frame, text="Back", command=back_to_main)
+continue_button = tk.Button(results_frame, text="Continue")
+continue_button.pack(pady=10)
+
+back_button = tk.Button(results_frame, text="Back")
 back_button.pack(pady=10)
 
-# Game Screen (Placeholder)
-game_frame = tk.Frame(root)
+root.after(1000, init_results_frame)  # Initiate the results frame after 1000ms (1 second)
 
-game_label = tk.Label(game_frame, text="Game Screen", font=("Helvetica", 24))
-game_label.pack(pady=10)
-
-back_to_main_button = tk.Button(game_frame, text="Back to Main", command=back_to_main)
-back_to_main_button.pack(pady=10)
-
-# Initially show the main frame
-show_instructions()
 root.mainloop()

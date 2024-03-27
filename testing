@@ -9,12 +9,24 @@ window.configure(bg=background_color)
 window.title("Dim Sum Game")
 window.geometry("1500x800")
 
+# Load button images and resize
 back_btn= PhotoImage(file='final cards/back_button.png')
 resized_back_btn = back_btn.subsample(2, 2)
 
 start_btn = PhotoImage(file='final cards/start_button.png')
 resized_start_btn = start_btn.subsample(2,2)
 
+instructions_btn= PhotoImage(file='final cards/instructions_button.png')
+resized_instructions_btn = instructions_btn.subsample(2, 2)
+
+continue_btn = PhotoImage(file='final cards/continue_button.png')
+resized_continue_btn = continue_btn.subsample(2,2)
+
+back_home_btn = PhotoImage(file='final cards/back_home_button.png')
+resized_back_home_btn = back_home_btn.subsample(2,2)
+
+
+# Set game definition
 def start_game():
     main_screen.pack()
 
@@ -49,21 +61,23 @@ def back_to_home_confirm():
         open_main()
 
 # Main screen 
-main_screen = tk.Frame(window, bg="#FBFAED")
+main_screen = tk.Frame(window, background=background_color)
 main_screen.pack(padx=20, pady=20)
 
 title_image = tk.PhotoImage(file="final cards/header.png")
 title_label = tk.Label(main_screen, image=title_image, background=background_color)
 title_label.pack(pady=10)
 
-#title_label = tk.Label(main_screen, text="The Dim Sum Game", background=background_color, font=("Roboto", "62")).pack(pady=10)
-start_button = tk.Button(main_screen, text="Play", command=open_story, image=resized_start_btn, borderwidth=None).pack(side=LEFT, pady=20)
-instructions_button = tk.Button(main_screen, text="Instructions", command=open_instructions).pack(side=LEFT, pady=20)
+main_screen_button_frame = tk.Frame(main_screen, background=background_color)
+main_screen_button_frame.pack(side=BOTTOM)
+
+start_button = tk.Button(main_screen_button_frame, text="Play", command=open_story, image=start_btn, borderwidth=0, background=background_color).pack(side=LEFT, pady=20)
+instructions_button = tk.Button(main_screen_button_frame, text="Instructions", command=open_instructions, image=instructions_btn, borderwidth=0, background=background_color).pack(side=LEFT, pady=20)
 
 # Instructions Screen
 instructions_frame = tk.Frame(window, background=background_color)
 instructions_frame.pack(expand=TRUE, pady=10)
-instructions_label = tk.Label(instructions_frame, text="Instructions", font=("Roboto", "32"))
+instructions_label = tk.Label(instructions_frame, text="Instructions", font=("Georgia", "32"), background=background_color)
 instructions_label.pack(expand=TRUE, pady=10)
 
 instructions_text = """
@@ -76,7 +90,7 @@ How to play:
 4. Tadaa! You have made a dish. 
 """
 
-instructions_text_label = tk.Label(instructions_frame, text=instructions_text, background=background_color, font=("Roboto", "24"), justify=LEFT).pack(pady=10)
+instructions_text_label = tk.Label(instructions_frame, text=instructions_text, background=background_color, font=("Georgia", "24"), justify=LEFT).pack(pady=10)
 back_button = tk.Button(instructions_frame, background=background_color, image=resized_back_btn , text="Back", command=open_main, borderwidth=0).pack(pady=10)
 
 # Story screen
@@ -90,20 +104,24 @@ One day, you decided to visit Dim Sum Delights for a fun lunch outing. As you sa
 
 Now, tap your cards to explore the world of dim sum... 
 """
-story_text_label = tk.Label(story_frame, text=story_text, wraplength=1000, background=background_color, font=("Roboto", "24"), justify=LEFT).pack(pady=10)
-continue_button = tk.Button(story_frame, text="Continue", command=scan_cards).pack(pady=10)
+story_text_label = tk.Label(story_frame, text=story_text, wraplength=1000, background=background_color, font=("Georgia", "24"), justify=LEFT).pack(pady=10)
+continue_button = tk.Button(story_frame, text="Continue", command=scan_cards, borderwidth=0, image=resized_continue_btn).pack(pady=10)
 
 # Scan card screen
 scan_cards_frame = tk.Frame(window, background=background_color)
 scan_cards_frame.pack(padx=10, pady=10)
 
-scan_cards_label = tk.Label(scan_cards_frame, text="Tap to scan", wraplength=250, font=("Roboto", "24"), background=background_color).pack(pady=10)
+scan_cards_label = tk.Label(scan_cards_frame, text="Tap to scan", wraplength=250, font=("Georgia", "24"), background=background_color).pack(pady=10)
+
+# Ingredients frame
+ingredients_frame = tk.Frame(scan_cards_frame, background=background_color)
+ingredients_frame.pack(padx=10, pady=10)
 
 # Wrapper box
-wrapper_box = tk.Frame(scan_cards_frame, height=50, width=50, background=background_color)
+wrapper_box = tk.Frame(ingredients_frame, height=50, width=50, background=background_color)
 wrapper_box.pack(side=LEFT, padx=5, pady=5)
 
-wrapper_box_label = tk.Label(wrapper_box, text="Choose your wrapping", background=background_color)
+wrapper_box_label = tk.Label(wrapper_box, text="Choose your wrapping", background=background_color, font=("Georgia", "24"))
 wrapper_box_label.pack(pady=10)
 
 wrapper_image = tk.PhotoImage(file="final cards/beef.png")
@@ -111,10 +129,10 @@ wrapper_image_label = tk.Label(wrapper_box, image=wrapper_image, background=back
 wrapper_image_label.pack()
 
 # Protein box
-protein_box = tk.Frame(scan_cards_frame, height=50, width=50, background=background_color)
+protein_box = tk.Frame(ingredients_frame, height=50, width=50, background=background_color)
 protein_box.pack(side=LEFT)
 
-protein_box_label = tk.Label(protein_box, text="Choose your protein", background=background_color)
+protein_box_label = tk.Label(protein_box, text="Choose your protein", background=background_color, font=("Georgia", "24"))
 protein_box_label.pack(pady=10)
 
 protein_image = tk.PhotoImage(file="final cards/beef.png")
@@ -122,10 +140,10 @@ protein_image_label = tk.Label(protein_box, image=protein_image, background=back
 protein_image_label.pack()
 
 # Vegetables box
-vegetable_box = tk.Frame(scan_cards_frame, height=50, width=50, background=background_color)
+vegetable_box = tk.Frame(ingredients_frame, height=50, width=50, background=background_color)
 vegetable_box.pack(side=LEFT)
 
-vegetable_box_label = tk.Label(vegetable_box, text="Choose your veggies")
+vegetable_box_label = tk.Label(vegetable_box, text="Choose your veggies", font=("Georgia", "24"))
 vegetable_box_label.pack(pady=10)
 
 vegetable_image = tk.PhotoImage(file="final cards/beef.png")
@@ -133,25 +151,28 @@ vegetable_image_label = tk.Label(vegetable_box, image=vegetable_image, backgroun
 vegetable_image_label.pack()
 
 # Cooking method box
-method_box = tk.Frame(scan_cards_frame, height=50, width=50, background=background_color)
+method_box = tk.Frame(ingredients_frame, height=50, width=50, background=background_color)
 method_box.pack(side=LEFT)
 
-method_box_label = tk.Label(vegetable_box, text="Choose your way of cooking", background=background_color)
+method_box_label = tk.Label(vegetable_box, text="Choose your way of cooking", background=background_color, font=("Georgia", "24"))
 method_box_label.pack(pady=10)
 
 method_image = tk.PhotoImage(file="final cards/steamed.png")
 method_image_label = tk.Label(vegetable_box, image=method_image, background=background_color)
 method_image_label.pack()
 
+scan_cards_button_frame = tk.Frame(scan_cards_frame, background=background_color)
+scan_cards_button_frame.pack()
+
 # Back to home button
-back_button = tk.Button(scan_cards_frame, text="Back to Home", command=back_to_home_confirm, image=resized_back_btn).pack(pady=10)
+back_button = tk.Button(scan_cards_button_frame, command=back_to_home_confirm, image=resized_back_home_btn, borderwidth=0).pack(pady=10, side=LEFT)
 
 # Continue to results: this will be based on conditional when card is scaneed
-continue_button = tk.Button(scan_cards_frame, text="Continue", command=open_results).pack(pady=10)
+continue_button = tk.Button(scan_cards_button_frame, text="Continue", command=open_results, image=resized_continue_btn, borderwidth=0).pack(pady=10, side=LEFT)
 
 # Results screen
 results_frame = tk.Frame(window, background=background_color)
-results_label = tk.Label(results_frame, text="Tadaa!", font=("Roboto", 32))
+results_label = tk.Label(results_frame, text="Tadaa!", font=("Georgia", 32))
 results_frame.pack(pady=10)
 
 results_text = """
@@ -160,14 +181,14 @@ You've made [dish name]!
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis auctor elit sed vulputate mi sit amet. Sem integer vitae justo eget magna. Vestibulum morbi blandit cursus risus at ultrices. Scelerisque eu ultrices vitae auctor eu augue. Laoreet suspendisse interdum consectetur libero id faucibus nisl tincidunt eget. Lacinia quis vel eros donec ac odio tempor orci. Nec dui nunc mattis enim ut tellus. Imperdiet dui accumsan sit amet nulla. At tellus at urna condimentum mattis pellentesque id nibh. Diam vel quam elementum pulvinar etiam non quam lacus suspendisse. Cursus vitae congue mauris rhoncus aenean vel elit. Id cursus metus aliquam eleifend mi in nulla posuere sollicitudin. Fringilla est ullamcorper eget nulla facilisi etiam dignissim. Dapibus ultrices in iaculis nunc sed augue lacus. Vehicula ipsum a arcu cursus vitae congue. Nisi est sit amet facilisis. Ac tincidunt vitae semper quis lectus nulla at. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet.
 """
 
-results_text_label = tk.Label(results_frame, text=results_text, wraplength=1000, background=background_color, font=("Roboto", "16")).pack(pady=10)
+results_text_label = tk.Label(results_frame, text=results_text, wraplength=1000, background=background_color, font=("Georgia", "16")).pack(pady=10)
 
 results_image = tk.PhotoImage(file="final cards/hargow.png")
 results_image_label = tk.Label(results_frame, image=results_image)
 results_image_label.pack()
 
-continue_button = tk.Button(results_frame, text="Continue", command=scan_cards).pack(pady=10)
-back_button = tk.Button(results_frame, text="Back", command=back_to_home_confirm).pack(pady=10)
+continue_button = tk.Button(results_frame, text="Continue", command=scan_cards, image=resized_continue_btn, borderwidth=0).pack(pady=10)
+back_button = tk.Button(results_frame, text="Back", command=back_to_home_confirm, image=resized_back_home_btn, borderwidth=0).pack(pady=10)
 
 
 open_main()

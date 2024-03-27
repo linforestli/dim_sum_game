@@ -95,8 +95,6 @@ def on_card_scanned(card_data):
     scanned_cards.append(card_data)
     if scan_popup:
         update_popup_with_scan(card_data)
-        if len(scanned_cards) >= 4 and scan_popup:  # Changed to >= to match new logic
-            show_combine_button()
 
 
 def update_popup_with_scan(card_data):
@@ -135,7 +133,7 @@ def check_combination():
         messagebox.showinfo("Result", "This combination doesn't work.")
         scanned_cards.clear()
 
-def start_game():
+#def start_game():
     scan_popup = tk.Toplevel(window)
     scan_popup.title("Scan Cards")
     scan_popup.geometry("1500x800")
@@ -158,6 +156,7 @@ def show_dish_story():
     for widget in scan_popup.winfo_children():
         widget.destroy()  # Clear the current content of the popup
 
+
 window = tk.Tk()
 window.title("Dim Sum Game")
 window.geometry("1500x800")
@@ -170,7 +169,7 @@ title_image = tk.PhotoImage(file="final cards/header.png")
 title_label = tk.Label(main_screen, image=title_image, background=background_color)
 title_label.pack(pady=10)
 
-start_button = tk.Button(main_screen, text="Play", command=open_story, image=resized_start_btn, borderwidth=None).pack(side=LEFT, pady=20)
+start_button = tk.Button(main_screen, text="Play", command=open_story, borderwidth=None).pack(side=LEFT, pady=20)
 instructions_button = tk.Button(main_screen, text="Instructions", command=open_instructions).pack(side=LEFT, pady=20)
 
 # Instructions Screen
@@ -190,13 +189,21 @@ How to play:
 """
 
 instructions_text_label = tk.Label(instructions_frame, text=instructions_text, background=background_color, font=("Roboto", "24"), justify=LEFT).pack(pady=10)
-back_button = tk.Button(instructions_frame, background=background_color, image=resized_back_btn , text="Back", command=open_main, borderwidth=0).pack(pady=10)
+back_button = tk.Button(instructions_frame, background=background_color, text="Back", command=open_main, borderwidth=0).pack(pady=10)
 
 # Story screen
 story_frame = tk.Frame(window, background=background_color)
 story_frame.pack(pady=10)
 
-show_dish_story()
+story_text = """
+Once upon a time, in a bustling city filled with the aroma of delicious food, there was a quaint little dim sum restaurant called "Dim Sum Delights." The restaurant was known far and wide for its exquisite dim sum dishes, each bursting with flavor and creativity. 
+
+One day, you decided to visit Dim Sum Delights for a fun lunch outing. As you sat down at their table, they noticed a unique set of cards placed in front of them. The cards were adorned with colorful illustrations of various dim sum ingredients like shrimp, pork, and mushrooms. 
+
+Now, tap your cards to explore the world of dim sum... 
+"""
+story_text_label = tk.Label(story_frame, text=story_text, wraplength=1000, background=background_color, font=("Roboto", "24"), justify=LEFT).pack(pady=10)
+continue_button = tk.Button(story_frame, text="Start game", command=scan_cards).pack(pady=10)
 
 # Scan card screen
 scan_cards_frame = tk.Frame(window, background=background_color)
@@ -204,52 +211,15 @@ scan_cards_frame.pack(padx=10, pady=10)
 
 scan_cards_label = tk.Label(scan_cards_frame, text="Tap to scan", wraplength=250, font=("Roboto", "24"), background=background_color).pack(pady=10)
 
-# Wrapper box
-wrapper_box = tk.Frame(scan_cards_frame, height=50, width=50, background=background_color)
-wrapper_box.pack(side=LEFT, padx=5, pady=5)
+# Add functions for reading cards hear:
+listen_to_card_scan()
+check_queue()
+on_card_scanned()
+...
 
-wrapper_box_label = tk.Label(wrapper_box, text="Choose your wrapping", background=background_color)
-wrapper_box_label.pack(pady=10)
-
-wrapper_image = tk.PhotoImage(file="final cards/beef.png")
-wrapper_image_label = tk.Label(wrapper_box, image=wrapper_image, background=background_color)
-wrapper_image_label.pack()
-
-# Protein box
-protein_box = tk.Frame(scan_cards_frame, height=50, width=50, background=background_color)
-protein_box.pack(side=LEFT)
-
-protein_box_label = tk.Label(protein_box, text="Choose your protein", background=background_color)
-protein_box_label.pack(pady=10)
-
-protein_image = tk.PhotoImage(file="final cards/beef.png")
-protein_image_label = tk.Label(protein_box, image=protein_image, background=background_color)
-protein_image_label.pack()
-
-# Vegetables box
-vegetable_box = tk.Frame(scan_cards_frame, height=50, width=50, background=background_color)
-vegetable_box.pack(side=LEFT)
-
-vegetable_box_label = tk.Label(vegetable_box, text="Choose your veggies")
-vegetable_box_label.pack(pady=10)
-
-vegetable_image = tk.PhotoImage(file="final cards/beef.png")
-vegetable_image_label = tk.Label(vegetable_box, image=vegetable_image, background=background_color)
-vegetable_image_label.pack()
-
-# Cooking method box
-method_box = tk.Frame(scan_cards_frame, height=50, width=50, background=background_color)
-method_box.pack(side=LEFT)
-
-method_box_label = tk.Label(vegetable_box, text="Choose your way of cooking", background=background_color)
-method_box_label.pack(pady=10)
-
-method_image = tk.PhotoImage(file="final cards/steamed.png")
-method_image_label = tk.Label(vegetable_box, image=method_image, background=background_color)
-method_image_label.pack()
 
 # Back to home button
-back_button = tk.Button(scan_cards_frame, text="Back to Home", command=back_to_home_confirm, image=resized_back_btn).pack(pady=10)
+back_button = tk.Button(scan_cards_frame, text="Back to Home", command=back_to_home_confirm).pack(pady=10)
 
 # Continue to results: this will be based on conditional when card is scaneed
 continue_button = tk.Button(scan_cards_frame, text="Continue", command=open_results).pack(pady=10)
@@ -258,6 +228,8 @@ continue_button = tk.Button(scan_cards_frame, text="Continue", command=open_resu
 results_frame = tk.Frame(window, background=background_color)
 results_label = tk.Label(results_frame, text="Tadaa!", font=("Roboto", 32))
 results_frame.pack(pady=10)
+
+show_dish_story()
 
 # Can we run the list of results?
 results_text = """

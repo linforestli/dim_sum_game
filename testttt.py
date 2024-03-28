@@ -51,7 +51,7 @@ def open_story():
     main_screen.pack_forget()
     story_frame.pack()
 
-def scan_cards():
+def scan_cards(): #Update and combine functions
     story_frame.pack_forget()
     results_frame.pack_forget()
     scan_cards_frame.pack()
@@ -211,18 +211,16 @@ scan_cards_frame.pack(padx=10, pady=10)
 
 scan_cards_label = tk.Label(scan_cards_frame, text="Tap to scan", wraplength=250, font=("Roboto", "24"), background=background_color).pack(pady=10)
 
-# Add functions for reading cards hear:
+# Add functions for reading cards hear, then call it hear:
 listen_to_card_scan()
 check_queue()
 on_card_scanned()
 ...
 
-
-# Back to home button
 back_button = tk.Button(scan_cards_frame, text="Back to Home", command=back_to_home_confirm).pack(pady=10)
 
 # Continue to results: this will be based on conditional when card is scaneed
-continue_button = tk.Button(scan_cards_frame, text="Continue", command=open_results).pack(pady=10)
+continue_button = tk.Button(scan_cards_frame, text="Cook the dish!", command=open_results).pack(pady=10)
 
 # Results screen
 results_frame = tk.Frame(window, background=background_color)
@@ -231,7 +229,6 @@ results_frame.pack(pady=10)
 
 show_dish_story()
 
-# Can we run the list of results?
 results_text = """
 You've made [dish name]!
 

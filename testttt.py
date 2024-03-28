@@ -1,14 +1,14 @@
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import *
-import serial  # install pyserial to make it work
+#import serial  # install pyserial to make it work
 import threading
 import queue
 import csv
 import json
 
 # Set up the port
-ser = serial.Serial('/dev/cu.usbmodem2101', 9600, timeout=1)
+#ser = serial.Serial('/dev/cu.usbmodem2101', 9600, timeout=1)
 
 card_icons = {
     "bambooshoot": "bambooshoot.png",
@@ -47,9 +47,19 @@ def open_main():
     results_frame.pack_forget()
     main_screen.pack()
 
+def open_story():
+    main_screen.pack_forget()
+    story_frame.pack()
+
+def back_to_home_confirm():
+    result = messagebox.askquestion("Confirmation", "Are you sure you want to go back to home?")
+    if result == 'yes':
+        scan_cards_frame.pack_forget()
+        open_main()
+
 # Set up functions for game mechanism
 
-def listen_for_card_scans():
+#def listen_for_card_scans():
     while True:
         if ser.in_waiting:
             line = ser.readline().decode('utf-8').strip()
@@ -72,7 +82,7 @@ def on_card_scanned(card_data):
         messagebox.showwarning("Warning", "Card already scanned!")
         return
     scanned_cards.append(card_data)
-    if scan_card_frame:
+    if scan_card_frame: # TODO: cannot call out frame here, should be a variable
         update_frame_with_scan(card_data)
         if len(scanned_cards) >= 4 and scan_card_frame:  # Changed to >= to match new logic
             show_combine_button()
@@ -111,8 +121,20 @@ def check_combination():
         ingredient_set = set(ingredients)
         print(ingredient_set)
         if ingredient_set == scanned_set:
-            # TODO: you can choose to initialize your result frame here
-            messagebox.showinfo("Success", f"You've made a {dish}!")
+            results_text = """
+            You've made [dish name]!
+
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis auctor elit sed vulputate mi sit amet. Sem integer vitae justo eget magna. Vestibulum morbi blandit cursus risus at ultrices. Scelerisque eu ultrices vitae auctor eu augue. Laoreet suspendisse interdum consectetur libero id faucibus nisl tincidunt eget. Lacinia quis vel eros donec ac odio tempor orci. Nec dui nunc mattis enim ut tellus. Imperdiet dui accumsan sit amet nulla. At tellus at urna condimentum mattis pellentesque id nibh. Diam vel quam elementum pulvinar etiam non quam lacus suspendisse. Cursus vitae congue mauris rhoncus aenean vel elit. Id cursus metus aliquam eleifend mi in nulla posuere sollicitudin. Fringilla est ullamcorper eget nulla facilisi etiam dignissim. Dapibus ultrices in iaculis nunc sed augue lacus. Vehicula ipsum a arcu cursus vitae congue. Nisi est sit amet facilisis. Ac tincidunt vitae semper quis lectus nulla at. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet.
+            """
+
+            results_text_label = tk.Label(results_frame, text=results_text, wraplength=1000, background=background_color, font=("Roboto", "16")).pack(pady=10)
+
+            results_image = tk.PhotoImage(file="final cards/hargow.png")
+            results_image_label = tk.Label(results_frame, image=results_image)
+            results_image_label.pack()
+
+            continue_button = tk.Button(results_frame, text="Continue", command=scan_cards).pack(pady=10)
+            back_button = tk.Button(results_frame, text="Back", command=back_to_home_confirm).pack(pady=10)
             scanned_cards.clear()
             found_valid_combination = True
             break  # Exit the loop after finding a valid combination
@@ -122,14 +144,12 @@ def check_combination():
         messagebox.showinfo("Result", "This combination doesn't work.")
         scanned_cards.clear()
 
-# TODO: update the scan card frame initialization
 def start_scan():
     global scanned_cards, scan_popup
     scanned_cards.clear()  # Reset scanned cards
-    scan_popup = tk.Toplevel(window)
-    scan_popup.title("Scan Cards")
-    scan_popup.geometry("1500x800")
-    tk.Label(scan_popup, text="Add your ingredients!").pack()
+    scan_cards_frame = tk.Frame(window, background=background_color)
+    scan_cards_frame.pack(padx=10, pady=10)
+    scan_cards_label = tk.Label(scan_cards_frame, text="Tap to scan", wraplength=250, font=("Roboto", "24"), background=background_color).pack(pady=10)
 
 
 def show_dish_story():
@@ -182,13 +202,39 @@ How to play:
 """
 
 instructions_text_label = tk.Label(instructions_frame, text=instructions_text, background=background_color, font=("Roboto", "24"), justify=LEFT).pack(pady=10)
-back_button = tk.Button(instructions_frame, background=background_color, image=resized_back_btn , text="Back", command=open_main, borderwidth=0).pack(pady=10)
+back_button = tk.Button(instructions_frame, background=background_color, text="Back", command=open_main, borderwidth=0).pack(pady=10)
+
+# Story screen
+story_frame = tk.Frame(window, background=background_color)
+story_frame.pack(pady=10)
+
+story_text = """
+Once upon a time, in a bustling city filled with the aroma of delicious food, there was a quaint little dim sum restaurant called "Dim Sum Delights." The restaurant was known far and wide for its exquisite dim sum dishes, each bursting with flavor and creativity. 
+
+One day, you decided to visit Dim Sum Delights for a fun lunch outing. As you sat down at their table, they noticed a unique set of cards placed in front of them. The cards were adorned with colorful illustrations of various dim sum ingredients like shrimp, pork, and mushrooms. 
+
+Now, tap your cards to explore the world of dim sum... 
+"""
+story_text_label = tk.Label(story_frame, text=story_text, wraplength=1000, background=background_color, font=("Roboto", "24"), justify=LEFT).pack(pady=10)
+continue_button = tk.Button(story_frame, text="Continue", command=check_combination).pack(pady=10)
+
+# Initiate scan cards frame
+scan_cards_frame = tk.Frame(window, background=background_color)
+scan_cards_frame.pack(padx=10, pady=10)
+scan_cards_label = tk.Label(scan_cards_frame, text="Tap to scan", wraplength=250, font=("Roboto", "24"), background=background_color).pack(pady=10)
+
+# Initiate results frame
+results_frame = tk.Frame(window, background=background_color)
+results_label = tk.Label(results_frame, text="Tadaa!", font=("Roboto", 32))
+results_frame.pack(pady=10)
 
 
 # Start listening for card scans in a separate thread
-thread = threading.Thread(target=listen_for_card_scans, daemon=True)
-thread.start()
+#thread = threading.Thread(target=listen_for_card_scans, daemon=True)
+#thread.start()
 
-window.after(100, check_queue)  # Start checking the queue
+#window.after(100, check_queue)  # Start checking the queue
 
+open_main()
 window.mainloop()
+

@@ -121,20 +121,7 @@ def check_combination():
         ingredient_set = set(ingredients)
         print(ingredient_set)
         if ingredient_set == scanned_set:
-            results_text = """
-            You've made [dish name]!
-
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis auctor elit sed vulputate mi sit amet. Sem integer vitae justo eget magna. Vestibulum morbi blandit cursus risus at ultrices. Scelerisque eu ultrices vitae auctor eu augue. Laoreet suspendisse interdum consectetur libero id faucibus nisl tincidunt eget. Lacinia quis vel eros donec ac odio tempor orci. Nec dui nunc mattis enim ut tellus. Imperdiet dui accumsan sit amet nulla. At tellus at urna condimentum mattis pellentesque id nibh. Diam vel quam elementum pulvinar etiam non quam lacus suspendisse. Cursus vitae congue mauris rhoncus aenean vel elit. Id cursus metus aliquam eleifend mi in nulla posuere sollicitudin. Fringilla est ullamcorper eget nulla facilisi etiam dignissim. Dapibus ultrices in iaculis nunc sed augue lacus. Vehicula ipsum a arcu cursus vitae congue. Nisi est sit amet facilisis. Ac tincidunt vitae semper quis lectus nulla at. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet.
-            """
-
-            results_text_label = tk.Label(results_frame, text=results_text, wraplength=1000, background=background_color, font=("Roboto", "16")).pack(pady=10)
-
-            results_image = tk.PhotoImage(file="final cards/hargow.png")
-            results_image_label = tk.Label(results_frame, image=results_image)
-            results_image_label.pack()
-
-            continue_button = tk.Button(results_frame, text="Continue", command=scan_cards).pack(pady=10)
-            back_button = tk.Button(results_frame, text="Back", command=back_to_home_confirm).pack(pady=10)
+            # TODO: if this condition is met, should it trigger the show_combine_button() or show_results()
             scanned_cards.clear()
             found_valid_combination = True
             break  # Exit the loop after finding a valid combination
@@ -159,6 +146,7 @@ def start_scan():
 def show_results():
     scan_cards_frame.pack_forget()
     results_frame.pack()
+    # TODO: Trigger this by setting a variable for dish_story (same as file name)
     dish_story = """The har gow dumpling originated in a teahouse in the Wucu village, 
        a suburban region of Guangzhou. It appeared on the outskirts at a teahouse in the Wucu village; 
        the owner was said to have had access to a river right outside, where shrimp would be caught and directly made into the fresh stuffing for har gow dumplings. """
@@ -231,6 +219,22 @@ results_frame = tk.Frame(window, background=background_color)
 results_label = tk.Label(results_frame, text="Tadaa!", font=("Roboto", 32))
 results_frame.pack(pady=10)
 
+
+# TODO: Update results test by search and replace in the database
+            results_text = """
+            You've made [dish name]!
+
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis auctor elit sed vulputate mi sit amet. Sem integer vitae justo eget magna. Vestibulum morbi blandit cursus risus at ultrices. Scelerisque eu ultrices vitae auctor eu augue. Laoreet suspendisse interdum consectetur libero id faucibus nisl tincidunt eget. Lacinia quis vel eros donec ac odio tempor orci. Nec dui nunc mattis enim ut tellus. Imperdiet dui accumsan sit amet nulla. At tellus at urna condimentum mattis pellentesque id nibh. Diam vel quam elementum pulvinar etiam non quam lacus suspendisse. Cursus vitae congue mauris rhoncus aenean vel elit. Id cursus metus aliquam eleifend mi in nulla posuere sollicitudin. Fringilla est ullamcorper eget nulla facilisi etiam dignissim. Dapibus ultrices in iaculis nunc sed augue lacus. Vehicula ipsum a arcu cursus vitae congue. Nisi est sit amet facilisis. Ac tincidunt vitae semper quis lectus nulla at. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet.
+            """
+
+            results_text_label = tk.Label(results_frame, text=results_text, wraplength=1000, background=background_color, font=("Roboto", "16")).pack(pady=10)
+
+            results_image = tk.PhotoImage(file="final cards/hargow.png")
+            results_image_label = tk.Label(results_frame, image=results_image)
+            results_image_label.pack()
+
+            continue_button = tk.Button(results_frame, text="Continue", command=scan_cards).pack(pady=10)
+            back_button = tk.Button(results_frame, text="Back", command=back_to_home_confirm).pack(pady=10)
 # Start listening for card scans in a separate thread
 #thread = threading.Thread(target=listen_for_card_scans, daemon=True)
 #thread.start()

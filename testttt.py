@@ -147,17 +147,18 @@ def check_combination():
 def start_scan():
     global scanned_cards, scan_popup
     scanned_cards.clear()  # Reset scanned cards
-    scan_cards_frame = tk.Frame(window, background=background_color)
-    scan_cards_frame.pack(padx=10, pady=10)
-    scan_cards_label = tk.Label(scan_cards_frame, text="Tap to scan", wraplength=250, font=("Roboto", "24"), background=background_color).pack(pady=10)
+    box1 = tk.Frame(scan_cards_frame, height=50, width=50, background=background_color)
+    box1.pack(side=LEFT, padx=5, pady=5)
+
+    # TODO: test with 1 card first if it shows up
+    box1_image = tk.PhotoImage(file="final cards/beef.png") # TODO: Trigger this by setting a variable for file name (which search for items in the database, then call it here)
+    box1_image_label = tk.Label(wrapper_box, image=wrapper_image, background=background_color)
+    box1_image_label.pack()
 
 
-def show_dish_story():
-    # Your existing show_dish_story function here
-    # Assuming you want to replace the current popup content with the story
-    for widget in scan_popup.winfo_children():
-        widget.destroy()  # Clear the current content of the popup
-
+def show_results():
+    scan_cards_frame.pack_forget()
+    results_frame.pack()
     dish_story = """The har gow dumpling originated in a teahouse in the Wucu village, 
        a suburban region of Guangzhou. It appeared on the outskirts at a teahouse in the Wucu village; 
        the owner was said to have had access to a river right outside, where shrimp would be caught and directly made into the fresh stuffing for har gow dumplings. """
@@ -222,12 +223,13 @@ continue_button = tk.Button(story_frame, text="Continue", command=check_combinat
 scan_cards_frame = tk.Frame(window, background=background_color)
 scan_cards_frame.pack(padx=10, pady=10)
 scan_cards_label = tk.Label(scan_cards_frame, text="Tap to scan", wraplength=250, font=("Roboto", "24"), background=background_color).pack(pady=10)
+# TODO: Add a function to initiate cards popping up when scanned
+
 
 # Initiate results frame
 results_frame = tk.Frame(window, background=background_color)
 results_label = tk.Label(results_frame, text="Tadaa!", font=("Roboto", 32))
 results_frame.pack(pady=10)
-
 
 # Start listening for card scans in a separate thread
 #thread = threading.Thread(target=listen_for_card_scans, daemon=True)

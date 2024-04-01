@@ -1,63 +1,32 @@
+# In Tkinter, you can use an `if` statement to control when an element pops up on a frame by changing its visibility. Typically, you would use the `pack`, `grid`, or `place` geometry managers to control the placement and visibility of widgets on a frame. Here's a simple example demonstrating how to use an `if` statement to control the visibility of a label on a frame:
+
 import tkinter as tk
 
-def show_instructions():
-    main_frame.pack_forget()
-    instructions_frame.pack()
+def toggle_label():
+    if label.winfo_ismapped():
+        label.pack_forget()  # Hide the label
+    else:
+        label.pack()  # Show the label
 
-def start_game():
-    main_frame.pack_forget()
-    game_frame.pack()
-
-def back_to_main():
-    instructions_frame.pack_forget()
-    main_frame.pack()
-
+# Create the main window
 root = tk.Tk()
-root.title("Dim Sum Adventure")
 
-# Main Screen
-main_frame = tk.Frame(root)
-main_frame.pack(padx=20, pady=20)
+# Create a frame
+frame = tk.Frame(root)
+frame.pack()
 
-title_label = tk.Label(main_frame, text="Dim Sum Adventure", font=("Helvetica", 24))
-title_label.pack(pady=10)
+# Create a label inside the frame
+label = tk.Label(frame, text="Hello, world!")
 
-instructions_button = tk.Button(main_frame, text="Instructions", command=show_instructions)
-instructions_button.pack(pady=10)
+# Initially hide the label
+label.pack_forget()
 
-start_game_button = tk.Button(main_frame, text="Start Game", command=start_game)
-start_game_button.pack(pady=10)
+# Create a button to toggle the label's visibility
+button = tk.Button(root, text="Toggle Label", command=toggle_label)
+button.pack()
 
-# Instructions Screen
-instructions_frame = tk.Frame(root)
-
-instructions_label = tk.Label(instructions_frame, text="Instructions", font=("Helvetica", 24))
-instructions_label.pack(pady=10)
-
-instructions_text = """
-Welcome to the Dim Sum Adventure game!
-
-How to play:
-- Tap on the ingredient cards to explore different dim sum dishes.
-- Learn about the ingredients and history of each dish.
-- Enjoy the culinary adventure with your friends!
-"""
-
-instructions_text_label = tk.Label(instructions_frame, text=instructions_text)
-instructions_text_label.pack(pady=10)
-
-back_button = tk.Button(instructions_frame, text="Back", command=back_to_main)
-back_button.pack(pady=10)
-
-# Game Screen (Placeholder)
-game_frame = tk.Frame(root)
-
-game_label = tk.Label(game_frame, text="Game Screen", font=("Helvetica", 24))
-game_label.pack(pady=10)
-
-back_to_main_button = tk.Button(game_frame, text="Back to Main", command=back_to_main)
-back_to_main_button.pack(pady=10)
-
-# Initially show the main frame
-show_instructions()
+# Run the Tkinter event loop
 root.mainloop()
+
+
+# In this example, we define a function `toggle_label()` that checks whether the label is currently visible (`label.winfo_ismapped()` returns `True` if the widget is mapped to the screen). If it is visible, the function hides the label using `label.pack_forget()`, and if it's hidden, it displays the label using `label.pack()`. Then, we create a button that triggers this function when clicked.

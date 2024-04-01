@@ -51,6 +51,11 @@ def open_story():
     main_screen.pack_forget()
     story_frame.pack()
 
+def open_scan_cards():
+    story_frame.pack_forget()
+    results_frame.pack_forget()
+    scan_cards_frame.pack()
+
 def back_to_home_confirm():
     result = messagebox.askquestion("Confirmation", "Are you sure you want to go back to home?")
     if result == 'yes':
@@ -206,7 +211,7 @@ One day, you decided to visit Dim Sum Delights for a fun lunch outing. As you sa
 Now, tap your cards to explore the world of dim sum... 
 """
 story_text_label = tk.Label(story_frame, text=story_text, wraplength=1000, background=background_color, font=("Roboto", "24"), justify=LEFT).pack(pady=10)
-continue_button = tk.Button(story_frame, text="Continue", command=start_scan).pack(pady=10)
+continue_button = tk.Button(story_frame, text="Continue", command=open_scan_cards).pack(pady=10)
 
 # Initiate scan cards frame
 scan_cards_frame = tk.Frame(window, background=background_color)

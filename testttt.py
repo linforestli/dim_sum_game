@@ -1,14 +1,14 @@
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import *
-#import serial  # install pyserial to make it work
+import serial  # install pyserial to make it work
 import threading
 import queue
 import csv
 import json
 
 # Set up the port
-#ser = serial.Serial('/dev/cu.usbmodem2101', 9600, timeout=1)
+ser = serial.Serial('/dev/cu.usbmodem2101', 9600, timeout=1)
 
 card_icons = {
     "bambooshoot": "bambooshoot.png",
@@ -59,7 +59,7 @@ def back_to_home_confirm():
 
 # Set up functions for game mechanism
 
-#def listen_for_card_scans():
+def listen_for_card_scans():
     while True:
         if ser.in_waiting:
             line = ser.readline().decode('utf-8').strip()
@@ -68,6 +68,7 @@ def back_to_home_confirm():
 
 
 def check_queue():
+    global card_data
     try:
         card_uid = data_queue.get(block=False)
         card_data = ingredient_map.get(card_uid.upper(), None)
@@ -76,15 +77,14 @@ def check_queue():
         pass
     window.after(100, check_queue)
 
-
 def on_card_scanned(card_data):
     if card_data in scanned_cards:  # Prevent duplicate scans
         messagebox.showwarning("Warning", "Card already scanned!")
         return
     scanned_cards.append(card_data)
-    if scan_card_frame: # TODO: cannot call out frame here, should be a variable
+    if scan_cards_frame: # TODO: cannot call out frame here, should be a variable
         update_frame_with_scan(card_data)
-        if len(scanned_cards) >= 4 and scan_card_frame:  # Changed to >= to match new logic
+        if len(scanned_cards) >= 4 and scan_cards_frame:  # Changed to >= to match new logic
             show_combine_button()
 
 
@@ -92,13 +92,13 @@ def update_frame_with_scan(card_data):
     if card_data in icon_map:
         icon_path = icon_map[card_data]
         icon = tk.PhotoImage(file=icon_path)
-        label = tk.Label(scan_card_frame, text=card_data, image=icon, compound='left')
-        label.image = icon  # Keep a reference!
+        label = tk.Label(scan_cards_frame, text=card_data, image=icon, compound='left')
+        label.image = icon
         label.pack()
 
 
 def show_combine_button():
-    combine_button = tk.Button(scan_card_frame, text="Cook!", command=check_combination)
+    combine_button = tk.Button(scan_cards_frame, text="Cook!", command=check_combination)
     combine_button.pack()
 
 
@@ -121,7 +121,7 @@ def check_combination():
         ingredient_set = set(ingredients)
         print(ingredient_set)
         if ingredient_set == scanned_set:
-            # TODO: if this condition is met, should it trigger the show_combine_button() or show_results()
+            # TODO: here should be the results frame + display the result
             scanned_cards.clear()
             found_valid_combination = True
             break  # Exit the loop after finding a valid combination
@@ -134,13 +134,14 @@ def check_combination():
 def start_scan():
     global scanned_cards, scan_popup
     scanned_cards.clear()  # Reset scanned cards
+    check_queue()
     box1 = tk.Frame(scan_cards_frame, height=50, width=50, background=background_color)
     box1.pack(side=LEFT, padx=5, pady=5)
 
     # TODO: test with 1 card first if it shows up
-    box1_image = tk.PhotoImage(file="final cards/beef.png") # TODO: Trigger this by setting a variable for file name (which search for items in the database, then call it here)
-    box1_image_label = tk.Label(wrapper_box, image=wrapper_image, background=background_color)
-    box1_image_label.pack()
+    # box1_image = tk.PhotoImage(file="final cards/cards/beef.png") # TODO: Trigger this by setting a variable for file name (which search for items in the database, then call it here)
+    # box1_image_label = tk.Label(wrapper_box, image=wrapper_image, background=background_color)
+    # box1_image.pack()
 
 
 def show_results():
@@ -205,7 +206,7 @@ One day, you decided to visit Dim Sum Delights for a fun lunch outing. As you sa
 Now, tap your cards to explore the world of dim sum... 
 """
 story_text_label = tk.Label(story_frame, text=story_text, wraplength=1000, background=background_color, font=("Roboto", "24"), justify=LEFT).pack(pady=10)
-continue_button = tk.Button(story_frame, text="Continue", command=check_combination).pack(pady=10)
+continue_button = tk.Button(story_frame, text="Continue", command=start_scan).pack(pady=10)
 
 # Initiate scan cards frame
 scan_cards_frame = tk.Frame(window, background=background_color)
@@ -221,25 +222,25 @@ results_frame.pack(pady=10)
 
 
 # TODO: Update results test by search and replace in the database
-            results_text = """
+results_text = """
             You've made [dish name]!
 
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis auctor elit sed vulputate mi sit amet. Sem integer vitae justo eget magna. Vestibulum morbi blandit cursus risus at ultrices. Scelerisque eu ultrices vitae auctor eu augue. Laoreet suspendisse interdum consectetur libero id faucibus nisl tincidunt eget. Lacinia quis vel eros donec ac odio tempor orci. Nec dui nunc mattis enim ut tellus. Imperdiet dui accumsan sit amet nulla. At tellus at urna condimentum mattis pellentesque id nibh. Diam vel quam elementum pulvinar etiam non quam lacus suspendisse. Cursus vitae congue mauris rhoncus aenean vel elit. Id cursus metus aliquam eleifend mi in nulla posuere sollicitudin. Fringilla est ullamcorper eget nulla facilisi etiam dignissim. Dapibus ultrices in iaculis nunc sed augue lacus. Vehicula ipsum a arcu cursus vitae congue. Nisi est sit amet facilisis. Ac tincidunt vitae semper quis lectus nulla at. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet.
             """
 
-            results_text_label = tk.Label(results_frame, text=results_text, wraplength=1000, background=background_color, font=("Roboto", "16")).pack(pady=10)
+results_text_label = tk.Label(results_frame, text=results_text, wraplength=1000, background=background_color, font=("Roboto", "16")).pack(pady=10)
 
-            results_image = tk.PhotoImage(file="final cards/hargow.png")
-            results_image_label = tk.Label(results_frame, image=results_image)
-            results_image_label.pack()
+results_image = tk.PhotoImage(file="final cards/cards/hargow.png")
+results_image_label = tk.Label(results_frame, image=results_image)
+results_image_label.pack()
 
-            continue_button = tk.Button(results_frame, text="Continue", command=scan_cards).pack(pady=10)
-            back_button = tk.Button(results_frame, text="Back", command=back_to_home_confirm).pack(pady=10)
+# continue_button = tk.Button(results_frame, text="Continue", command=start_scan).pack(pady=10)
+back_button = tk.Button(results_frame, text="Back", command=back_to_home_confirm).pack(pady=10)
 # Start listening for card scans in a separate thread
-#thread = threading.Thread(target=listen_for_card_scans, daemon=True)
-#thread.start()
+thread = threading.Thread(target=listen_for_card_scans, daemon=True)
+thread.start()
 
-#window.after(100, check_queue)  # Start checking the queue
+window.after(100, check_queue)  # Start checking the queue
 
 open_main()
 window.mainloop()

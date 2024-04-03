@@ -2,31 +2,27 @@
 
 import tkinter as tk
 
-def toggle_label():
-    if label.winfo_ismapped():
-        label.pack_forget()  # Hide the label
+def toggle_frame():
+    if snd_frame.winfo_ismapped():
+        snd_frame.pack_forget()
     else:
-        label.pack()  # Show the label
+        snd_frame.pack() 
 
 # Create the main window
 root = tk.Tk()
 
-# Create a frame
 frame = tk.Frame(root)
 frame.pack()
-
-# Create a label inside the frame
 label = tk.Label(frame, text="Hello, world!")
+label.pack()
 
-# Initially hide the label
-label.pack_forget()
+snd_frame = tk.Frame(root)
+snd_label = tk.Label(snd_frame, text="kkkk")
+snd_frame.pack_forget()
 
 # Create a button to toggle the label's visibility
-button = tk.Button(root, text="Toggle Label", command=toggle_label)
+button = tk.Button(root, text="Open Second frame", command=toggle_frame)
 button.pack()
 
 # Run the Tkinter event loop
 root.mainloop()
-
-
-# In this example, we define a function `toggle_label()` that checks whether the label is currently visible (`label.winfo_ismapped()` returns `True` if the widget is mapped to the screen). If it is visible, the function hides the label using `label.pack_forget()`, and if it's hidden, it displays the label using `label.pack()`. Then, we create a button that triggers this function when clicked.

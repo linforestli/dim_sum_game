@@ -12,6 +12,7 @@ ser = serial.Serial('COM7', 9600, timeout=1)
 
 ingredient_map = {}
 icon_map = {}
+story_map = {}
 
 with open('data/encoded-rfid_cards.csv', mode='r', encoding='utf-8') as infile:
     reader = csv.reader(infile)
@@ -23,6 +24,11 @@ with open('data/icon_path.csv', mode='r', encoding='utf-8') as infile:
 
 with open('data/combinations.json', 'r') as json_file:
     combinations = json.load(json_file)
+
+with open('data/dish_story.csv', mode='r', encoding='utf-8') as infile:
+    reader = csv.reader(infile)
+    story_map = {rows[0]: rows[1] for rows in reader}
+
 
 scanned_cards = []
 scan_popup = None
@@ -109,7 +115,6 @@ def check_combination():
     if total_scanned < 3:
         return
     elif total_scanned > 4:
-        print("Too many cards scanned, resetting...")
         messagebox.showinfo("Info", "Too many cards scanned, resetting...")
         scanned_cards.clear()
         return
@@ -119,13 +124,12 @@ def check_combination():
 
     for dish, ingredients in combinations.items():
         ingredient_set = set(ingredients)
-        #print(ingredient_set)
         if ingredient_set == scanned_set:
             # TODO: here should be the results frame + display the result
             scanned_cards.clear()
             found_valid_combination = True
+            show_results(dish)
             break  # Exit the loop after finding a valid combination
-        show_results()
 
     if not found_valid_combination and total_scanned == 4:
         # TODO: in case failed
@@ -139,14 +143,12 @@ def start_scan():
     check_queue()
 
 # Show results
-def show_results():
+def show_results(dish):
     scan_cards_frame.pack_forget()
     results_frame.pack()
-    # TODO: Trigger this by setting a variable for dish_story (same as file name)
-    dish_story = """The har gow dumpling originated in a teahouse in the Wucu village, 
-       a suburban region of Guangzhou. It appeared on the outskirts at a teahouse in the Wucu village; 
-       the owner was said to have had access to a river right outside, where shrimp would be caught and directly made into the fresh stuffing for har gow dumplings. """
-
+    for food in story_map:
+        if food == dish:
+            dish_story = story_map[food]
 
     story_label = tk.Label(scan_popup, text=dish_story, wraplength=250)
     story_label.pack()

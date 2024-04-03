@@ -133,8 +133,13 @@ def check_combination():
 
     if not found_valid_combination and total_scanned == 4:
         # TODO: in case failed
+        clear_button = tk.Button(scan_cards_frame, background=background_color, text="Back", command=clear_ingredient,
+                                borderwidth=0).pack(pady=10)
         messagebox.showinfo("Result", "This combination doesn't work.")
-        scanned_cards.clear()
+
+
+def clear_ingredient():
+    scanned_cards.clear()
 
 
 def start_scan():

@@ -8,16 +8,11 @@ import csv
 import json
 
 # Set up the port
-ser = serial.Serial('/dev/cu.usbmodem2101', 9600, timeout=1)
-
-card_icons = {
-    "bambooshoot": "bambooshoot.png",
-    "shrimp": "final cards/shrimp.png",
-    "steam": "steam.png",
-}
+ser = serial.Serial('COM7', 9600, timeout=1)
 
 ingredient_map = {}
 icon_map = {}
+
 with open('data/encoded-rfid_cards.csv', mode='r', encoding='utf-8') as infile:
     reader = csv.reader(infile)
     ingredient_map = {rows[0]: rows[1] for rows in reader}
@@ -87,26 +82,26 @@ def on_card_scanned(card_data):
         messagebox.showwarning("Warning", "Card already scanned!")
         return
     scanned_cards.append(card_data)
-    if scan_cards_frame: # TODO: cannot call out frame here, should be a variable
-        update_frame_with_scan(card_data)
-        if len(scanned_cards) >= 4 and scan_cards_frame:  # Changed to >= to match new logic
-            show_combine_button()
+    update_frame_with_scan(card_data)
+    if len(scanned_cards) >= 4:  # Changed to >= to match new logic
+        show_combine_button()
 
-
+# Update card photo when scanned
 def update_frame_with_scan(card_data):
     if card_data in icon_map:
         icon_path = icon_map[card_data]
         icon = tk.PhotoImage(file=icon_path)
-        label = tk.Label(scan_cards_frame, text=card_data, image=icon, compound='left')
-        label.image = icon
-        label.pack()
+        icon_resized = icon.subsample(2, 2)
+        label = tk.Label(scan_cards_frame, image=icon_resized, background=background_color)
+        label.image = icon_resized
+        label.pack(side=LEFT)
 
-
+# Show combine button when all ingredients are scanned
 def show_combine_button():
     combine_button = tk.Button(scan_cards_frame, text="Cook!", command=check_combination)
-    combine_button.pack()
+    combine_button.pack(side=TOP)
 
-
+# Check the combination to show results
 def check_combination():
     global scanned_cards
     total_scanned = len(scanned_cards)
@@ -124,31 +119,26 @@ def check_combination():
 
     for dish, ingredients in combinations.items():
         ingredient_set = set(ingredients)
-        print(ingredient_set)
+        #print(ingredient_set)
         if ingredient_set == scanned_set:
             # TODO: here should be the results frame + display the result
             scanned_cards.clear()
             found_valid_combination = True
             break  # Exit the loop after finding a valid combination
+        show_results()
 
     if not found_valid_combination and total_scanned == 4:
         # TODO: in case failed
         messagebox.showinfo("Result", "This combination doesn't work.")
         scanned_cards.clear()
 
+
 def start_scan():
     global scanned_cards, scan_popup
     scanned_cards.clear()  # Reset scanned cards
     check_queue()
-    box1 = tk.Frame(scan_cards_frame, height=50, width=50, background=background_color)
-    box1.pack(side=LEFT, padx=5, pady=5)
 
-    # TODO: test with 1 card first if it shows up
-    # box1_image = tk.PhotoImage(file="final cards/cards/beef.png") # TODO: Trigger this by setting a variable for file name (which search for items in the database, then call it here)
-    # box1_image_label = tk.Label(wrapper_box, image=wrapper_image, background=background_color)
-    # box1_image.pack()
-
-
+# Show results
 def show_results():
     scan_cards_frame.pack_forget()
     results_frame.pack()
@@ -156,6 +146,7 @@ def show_results():
     dish_story = """The har gow dumpling originated in a teahouse in the Wucu village, 
        a suburban region of Guangzhou. It appeared on the outskirts at a teahouse in the Wucu village; 
        the owner was said to have had access to a river right outside, where shrimp would be caught and directly made into the fresh stuffing for har gow dumplings. """
+
 
     story_label = tk.Label(scan_popup, text=dish_story, wraplength=250)
     story_label.pack()
@@ -165,11 +156,12 @@ def show_results():
 
 
 window = tk.Tk()
+window.configure(bg=background_color)
 window.title("Dim Sum Game")
 window.geometry("1500x800")
 
 # Main screen 
-main_screen = tk.Frame(window, bg="#FBFAED")
+main_screen = tk.Frame(window, bg=background_color)
 main_screen.pack(padx=20, pady=20)
 
 title_image = tk.PhotoImage(file="final cards/header.png")
@@ -217,12 +209,11 @@ continue_button = tk.Button(story_frame, text="Continue", command=open_scan_card
 scan_cards_frame = tk.Frame(window, background=background_color)
 scan_cards_frame.pack(padx=10, pady=10)
 scan_cards_label = tk.Label(scan_cards_frame, text="Tap to scan", wraplength=250, font=("Roboto", "24"), background=background_color).pack(pady=10)
-# TODO: Add a function to initiate cards popping up when scanned
-
 
 # Initiate results frame
+results_background = tk.PhotoImage(file="final cards/results_background.png")
 results_frame = tk.Frame(window, background=background_color)
-results_label = tk.Label(results_frame, text="Tadaa!", font=("Roboto", 32))
+results_label = tk.Label(results_frame, text="Tadaa!", font=("Roboto", 32), image=results_background)
 results_frame.pack(pady=10)
 
 
@@ -241,6 +232,7 @@ results_image_label.pack()
 
 # continue_button = tk.Button(results_frame, text="Continue", command=start_scan).pack(pady=10)
 back_button = tk.Button(results_frame, text="Back", command=back_to_home_confirm).pack(pady=10)
+
 # Start listening for card scans in a separate thread
 thread = threading.Thread(target=listen_for_card_scans, daemon=True)
 thread.start()

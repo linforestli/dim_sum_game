@@ -150,8 +150,12 @@ def show_results(dish):
         if food == dish:
             dish_story = story_map[food]
 
-    story_label = tk.Label(scan_popup, text=dish_story, wraplength=250)
+    story_label = tk.Label(results_frame, text=dish_story, wraplength=250)
     story_label.pack()
+     # TODO: ADD IMAGE OF FINAL DISH IN PLACE OF icon_resized
+    results_image = tk.Label(scan_cards_frame, image=icon_resized, background=background_color)
+    results_image.image = icon_resized
+    results_image.pack()
 
     close_button = tk.Button(scan_popup, text="Close", command=scan_popup.destroy)
     close_button.pack()

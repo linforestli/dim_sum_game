@@ -137,6 +137,7 @@ def check_combination():
         scanned_cards.clear()
 
 
+
 def start_scan():
     global scanned_cards, scan_popup
     scanned_cards.clear()  # Reset scanned cards
@@ -149,15 +150,16 @@ def show_results(dish):
     for food in story_map:
         if food == dish:
             dish_story = story_map[food]
-
     story_label = tk.Label(results_frame, text=dish_story, wraplength=250)
     story_label.pack()
-     # TODO: ADD IMAGE OF FINAL DISH IN PLACE OF icon_resized
+    
     for food in icon_map:
         if food == dish:
-            icon_resized = icon_map[food]
-    results_image = tk.Label(scan_cards_frame, image=icon_resized, background=background_color)
-    results_image.image = icon_resized
+            results_icon = icon_map[food]
+    
+    results_icon = tk.PhotoImage(file=results_icon)
+    results_image = tk.Label(results_frame, image=results_icon, background=background_color)
+    results_image.image = results_icon
     results_image.pack()
 
     close_button = tk.Button(scan_popup, text="Close", command=scan_popup.destroy)

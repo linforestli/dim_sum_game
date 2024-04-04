@@ -47,7 +47,6 @@ def open_main():
     scan_cards_frame.pack_forget()
     results_frame.pack_forget()
     main_screen.pack()
-    landing_bg.place(relheight=1, relwidth=1)
 
 def open_story():
     main_screen.pack_forget()
@@ -141,7 +140,8 @@ def check_combination():
 
 def clear_ingredient():
     scanned_cards.clear()
-    cards_box.pack_forget()
+    for widget in cards_box.winfo_children():
+        widget.destroy()
 
 
 
@@ -167,7 +167,7 @@ def show_results(dish):
     results_icon = tk.PhotoImage(file=results_icon)
     results_image = tk.Label(results_frame, image=results_icon, background=background_color)
     results_image.image = results_icon
-    results_image.pack()
+    results_image.place(relx=0.5, rely=0.6, anchor=CENTER)
 
     close_button = tk.Button(scan_popup, text="Close", command=scan_popup.destroy)
     close_button.pack()
@@ -185,6 +185,7 @@ main_screen.pack(fill=BOTH, expand=TRUE)
 ## Background for landing page
 landing_bg_img = tk.PhotoImage(file='final cards/landing_background.png')
 landing_bg = tk.Label(main_screen, image=landing_bg_img)
+landing_bg.pack()
 
 ## Game header for landing page
 title_image = tk.PhotoImage(file="final cards/header.png")
@@ -243,6 +244,7 @@ continue_button.pack(anchor=CENTER)
 scan_cards_frame = tk.Frame(window, background=background_color)
 scan_cards_frame.pack(padx=10, pady=10)
 scan_cards_label = tk.Label(scan_cards_frame, text="Tap to scan", wraplength=250, font=("Roboto", "24"), background=background_color).pack(pady=10)
+
 cards_box = tk.Frame(scan_cards_frame)
 cards_box.pack(padx=10, pady=10)
 
@@ -255,15 +257,10 @@ results_frame.pack(fill=BOTH, expand=TRUE)
 ## Background for results page
 results_bg_img = tk.PhotoImage(file='final cards/results_background.png')
 results_bg = tk.Label(results_frame, image=results_bg_img)
-results_bg.place(relheight=1, relwidth=1)
-
-#results_label = tk.Label(results_frame, text="Tadaa!", font=("Roboto", 32), image=results_bg)
-#results_frame.pack(pady=10)
-
-
+results_bg.pack()
 
 # continue_button = tk.Button(results_frame, text="Continue", command=start_scan).pack(pady=10)
-back_button = tk.Button(results_frame, text="Back", command=back_to_home_confirm).pack(pady=10)
+#back_button = tk.Button(results_frame, text="Back", command=back_to_home_confirm).pack(pady=10)
 
 # Start listening for card scans in a separate thread
 thread = threading.Thread(target=listen_for_card_scans, daemon=True)

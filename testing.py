@@ -28,19 +28,7 @@ def open_main():
     scan_cards_frame.pack_forget()
     results_frame.pack_forget()
     main_screen.pack()
-    ## Background for landing page
-    landing_bg_img = tk.PhotoImage(file='final cards/landing_background.png')
-    landing_bg = tk.Label(main_screen, image=landing_bg_img)
-
-    ## Game header for landing page
-    title_image = tk.PhotoImage(file="final cards/header.png")
-    title_label = tk.Label(main_screen, image=title_image)
-    title_label.place(relx=0.5, rely=0.3, anchor=CENTER)
-
-
-    start_button = tk.Button(main_screen, text="Play", command=open_story, image=resized_start_btn, borderwidth=None).pack(side=LEFT, pady=20)
-    instructions_button = tk.Button(main_screen, text="Instructions", command=open_instructions).pack(side=LEFT, pady=20)
-
+    
 
 def open_story():
     main_screen.pack_forget()
@@ -64,6 +52,23 @@ def back_to_home_confirm():
 # Main screen 
 main_screen = tk.Frame(window, bg="#FBFAED")
 main_screen.pack(fill=BOTH, expand=TRUE)
+
+## Background for landing page
+landing_bg_img = tk.PhotoImage(file='final cards/landing_background.png')
+landing_bg = tk.Label(main_screen, image=landing_bg_img)
+landing_bg.pack()
+
+## Game header for landing page
+title_image = tk.PhotoImage(file="final cards/header.png")
+title_label = tk.Label(main_screen, image=title_image)
+title_label.place(relx=0.5, rely=0.3, anchor=CENTER)
+
+start_button = tk.Button(main_screen, text="Play", command=open_story, image=resized_start_btn, borderwidth=None)
+start_button.place(relx=0.5, rely=0.5, anchor=CENTER)
+instructions_button = tk.Button(main_screen, text="Instructions", command=open_instructions)
+instructions_button.place(relx=0.5, rely=0.6, anchor=CENTER)
+
+
 
 # Instructions Screen
 instructions_frame = tk.Frame(window, background=background_color)

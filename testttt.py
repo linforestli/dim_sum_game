@@ -47,6 +47,7 @@ def open_main():
     scan_cards_frame.pack_forget()
     results_frame.pack_forget()
     main_screen.pack()
+    landing_bg.place(relheight=1, relwidth=1)
 
 def open_story():
     main_screen.pack_forget()
@@ -100,7 +101,7 @@ def update_frame_with_scan(card_data):
         icon_path = icon_map[card_data]
         icon = tk.PhotoImage(file=icon_path)
         icon_resized = icon.subsample(2, 2)
-        label = tk.Label(scan_cards_frame, image=icon_resized, background=background_color)
+        label = tk.Label(cards_box, image=icon_resized, background=background_color)
         label.image = icon_resized
         label.pack(side=LEFT)
 
@@ -138,13 +139,15 @@ def check_combination():
 
     if not found_valid_combination and total_scanned == 4:
         # TODO: in case failed
-        clear_button = tk.Button(scan_cards_frame, background=background_color, text="Back", command=clear_ingredient,
+        clear_button = tk.Button(scan_cards_frame, background=background_color, text="Clear", command=clear_ingredient,
                                 borderwidth=0).pack(pady=10)
         messagebox.showinfo("Result", "This combination doesn't work.")
 
 
 def clear_ingredient():
     scanned_cards.clear()
+    cards_box.pack_forget()
+
 
 
 def start_scan():
@@ -159,21 +162,22 @@ def show_results(dish):
     for food in story_map:
         if food == dish:
             dish_story = story_map[food]
-
     story_label = tk.Label(results_frame, text=dish_story, wraplength=250)
     story_label.pack()
-     # TODO: ADD IMAGE OF FINAL DISH IN PLACE OF icon_resized
+    
     for food in icon_map:
         if food == dish:
-            icon_resized = icon_map[food]
-    results_image = tk.Label(scan_cards_frame, image=icon_resized, background=background_color)
-    results_image.image = icon_resized
+            results_icon = icon_map[food]
+    
+    results_icon = tk.PhotoImage(file=results_icon)
+    results_image = tk.Label(results_frame, image=results_icon, background=background_color)
+    results_image.image = results_icon
     results_image.pack()
 
     close_button = tk.Button(scan_popup, text="Close", command=scan_popup.destroy)
     close_button.pack()
 
-
+# Initiate game
 window = tk.Tk()
 window.configure(bg=background_color)
 window.title("Dim Sum Game")
@@ -181,20 +185,30 @@ window.geometry("1500x800")
 
 # Main screen 
 main_screen = tk.Frame(window, bg=background_color)
-main_screen.pack(padx=20, pady=20)
+main_screen.pack(fill=BOTH, expand=TRUE)
 
+## Background for landing page
+landing_bg_img = tk.PhotoImage(file='final cards/landing_background.png')
+landing_bg = tk.Label(main_screen, image=landing_bg_img)
+
+## Game header for landing page
 title_image = tk.PhotoImage(file="final cards/header.png")
-title_label = tk.Label(main_screen, image=title_image, background=background_color)
-title_label.pack(pady=10)
+title_label = tk.Label(main_screen, image=title_image)
+title_label.place(relx=0.5, rely=0.3, anchor=CENTER)
 
-start_button = tk.Button(main_screen, text="Play", command=open_story, borderwidth=None).pack(side=LEFT, pady=20)
-instructions_button = tk.Button(main_screen, text="Instructions", command=open_instructions).pack(side=LEFT, pady=20)
+## Buttons for main screen
+start_btn_img = PhotoImage(file='final cards/start_button.png')
+start_button = Button(main_screen, command=open_story, image=start_btn_img, borderwidth=0, background=background_color)
+start_button.place(relx=0.5, rely=0.5, anchor=CENTER)
 
+instructions_btn_img = PhotoImage(file='final cards/instructions_button.png')
+instructions_button = Button(main_screen, command=open_instructions, image=instructions_btn_img, borderwidth=0, background=background_color)
+instructions_button.place(relx=0.5, rely=0.6, anchor=CENTER)
 
 # Instructions Screen
 instructions_frame = tk.Frame(window, background=background_color)
 instructions_frame.pack(expand=TRUE, pady=10)
-instructions_label = tk.Label(instructions_frame, text="Instructions", font=("Roboto", "32"))
+instructions_label = tk.Label(instructions_frame, text="Instructions", font=("Roboto", "32"), background=background_color)
 instructions_label.pack(expand=TRUE, pady=10)
 
 instructions_text = """
@@ -208,7 +222,10 @@ How to play:
 """
 
 instructions_text_label = tk.Label(instructions_frame, text=instructions_text, background=background_color, font=("Roboto", "24"), justify=LEFT).pack(pady=10)
-back_button = tk.Button(instructions_frame, background=background_color, text="Back", command=open_main, borderwidth=0).pack(pady=10)
+
+back_btn_img = PhotoImage(file='final cards/back_button.png')
+back_button = Button(instructions_frame, image= back_btn_img, command=open_main, borderwidth=0)
+back_button.pack(anchor=CENTER)
 
 # Story screen
 story_frame = tk.Frame(window, background=background_color)
@@ -222,18 +239,33 @@ One day, you decided to visit Dim Sum Delights for a fun lunch outing. As you sa
 Now, tap your cards to explore the world of dim sum... 
 """
 story_text_label = tk.Label(story_frame, text=story_text, wraplength=1000, background=background_color, font=("Roboto", "24"), justify=LEFT).pack(pady=10)
-continue_button = tk.Button(story_frame, text="Continue", command=open_scan_cards).pack(pady=10)
+
+continue_btn_img = PhotoImage(file='final cards/continue_button.png')
+continue_button = tk.Button(story_frame, background=background_color, image=continue_btn_img, command=open_scan_cards, borderwidth=0)
+continue_button.pack(anchor=CENTER)
 
 # Initiate scan cards frame
 scan_cards_frame = tk.Frame(window, background=background_color)
 scan_cards_frame.pack(padx=10, pady=10)
 scan_cards_label = tk.Label(scan_cards_frame, text="Tap to scan", wraplength=250, font=("Roboto", "24"), background=background_color).pack(pady=10)
+cards_box = tk.Frame(scan_cards_frame)
+cards_box.pack(padx=10, pady=10)
+
+
 
 # Initiate results frame
-results_background = tk.PhotoImage(file="final cards/results_background.png")
 results_frame = tk.Frame(window, background=background_color)
-results_label = tk.Label(results_frame, text="Tadaa!", font=("Roboto", 32), image=results_background)
-results_frame.pack(pady=10)
+results_frame.pack(fill=BOTH, expand=TRUE)
+
+## Background for results page
+results_bg_img = tk.PhotoImage(file='final cards/results_background.png')
+results_bg = tk.Label(results_frame, image=results_bg_img)
+results_bg.place(relheight=1, relwidth=1)
+
+#results_label = tk.Label(results_frame, text="Tadaa!", font=("Roboto", 32), image=results_bg)
+#results_frame.pack(pady=10)
+
+
 
 # continue_button = tk.Button(results_frame, text="Continue", command=start_scan).pack(pady=10)
 back_button = tk.Button(results_frame, text="Back", command=back_to_home_confirm).pack(pady=10)

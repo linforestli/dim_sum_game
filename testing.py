@@ -28,6 +28,19 @@ def open_main():
     scan_cards_frame.pack_forget()
     results_frame.pack_forget()
     main_screen.pack()
+    ## Background for landing page
+    landing_bg_img = tk.PhotoImage(file='final cards/landing_background.png')
+    landing_bg = tk.Label(main_screen, image=landing_bg_img)
+
+    ## Game header for landing page
+    title_image = tk.PhotoImage(file="final cards/header.png")
+    title_label = tk.Label(main_screen, image=title_image)
+    title_label.place(relx=0.5, rely=0.3, anchor=CENTER)
+
+
+    start_button = tk.Button(main_screen, text="Play", command=open_story, image=resized_start_btn, borderwidth=None).pack(side=LEFT, pady=20)
+    instructions_button = tk.Button(main_screen, text="Instructions", command=open_instructions).pack(side=LEFT, pady=20)
+
 
 def open_story():
     main_screen.pack_forget()
@@ -50,14 +63,7 @@ def back_to_home_confirm():
 
 # Main screen 
 main_screen = tk.Frame(window, bg="#FBFAED")
-main_screen.pack(padx=20, pady=20)
-
-title_image = tk.PhotoImage(file="final cards/header.png")
-title_label = tk.Label(main_screen, image=title_image, background=background_color)
-title_label.pack(pady=10)
-
-start_button = tk.Button(main_screen, text="Play", command=open_story, image=resized_start_btn, borderwidth=None).pack(side=LEFT, pady=20)
-instructions_button = tk.Button(main_screen, text="Instructions", command=open_instructions).pack(side=LEFT, pady=20)
+main_screen.pack(fill=BOTH, expand=TRUE)
 
 # Instructions Screen
 instructions_frame = tk.Frame(window, background=background_color)
@@ -105,7 +111,7 @@ wrapper_box.pack(side=LEFT, padx=5, pady=5)
 wrapper_box_label = tk.Label(wrapper_box, text="Choose your wrapping", background=background_color)
 wrapper_box_label.pack(pady=10)
 
-wrapper_image = tk.PhotoImage(file="final cards/beef.png")
+wrapper_image = tk.PhotoImage(file="final cards/cards/beef.png")
 wrapper_image_label = tk.Label(wrapper_box, image=wrapper_image, background=background_color)
 wrapper_image_label.pack()
 
@@ -116,7 +122,7 @@ protein_box.pack(side=LEFT)
 protein_box_label = tk.Label(protein_box, text="Choose your protein", background=background_color)
 protein_box_label.pack(pady=10)
 
-protein_image = tk.PhotoImage(file="final cards/beef.png")
+protein_image = tk.PhotoImage(file="final cards/cards/beef.png")
 protein_image_label = tk.Label(protein_box, image=protein_image, background=background_color)
 protein_image_label.pack()
 
@@ -127,7 +133,7 @@ vegetable_box.pack(side=LEFT)
 vegetable_box_label = tk.Label(vegetable_box, text="Choose your veggies")
 vegetable_box_label.pack(pady=10)
 
-vegetable_image = tk.PhotoImage(file="final cards/beef.png")
+vegetable_image = tk.PhotoImage(file="final cards/cards/beef.png")
 vegetable_image_label = tk.Label(vegetable_box, image=vegetable_image, background=background_color)
 vegetable_image_label.pack()
 
@@ -138,7 +144,7 @@ method_box.pack(side=LEFT)
 method_box_label = tk.Label(vegetable_box, text="Choose your way of cooking", background=background_color)
 method_box_label.pack(pady=10)
 
-method_image = tk.PhotoImage(file="final cards/steamed.png")
+method_image = tk.PhotoImage(file="final cards/cards/steamed.png")
 method_image_label = tk.Label(vegetable_box, image=method_image, background=background_color)
 method_image_label.pack()
 
@@ -161,7 +167,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 results_text_label = tk.Label(results_frame, text=results_text, wraplength=1000, background=background_color, font=("Roboto", "16")).pack(pady=10)
 
-results_image = tk.PhotoImage(file="final cards/hargow.png")
+results_image = tk.PhotoImage(file="final cards/cards/hargow.png")
 results_image_label = tk.Label(results_frame, image=results_image)
 results_image_label.pack()
 

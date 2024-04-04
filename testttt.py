@@ -83,13 +83,15 @@ def check_queue():
         pass
     window.after(100, check_queue)
 
+combine_button_shown = False
+
 def on_card_scanned(card_data):
     if card_data in scanned_cards:  # Prevent duplicate scans
         messagebox.showwarning("Warning", "Card already scanned!")
         return
     scanned_cards.append(card_data)
     update_frame_with_scan(card_data)
-    if len(scanned_cards) >= 4:  # Changed to >= to match new logic
+    if len(scanned_cards) >= 4:
         show_combine_button()
 
 # Update card photo when scanned
@@ -104,8 +106,11 @@ def update_frame_with_scan(card_data):
 
 # Show combine button when all ingredients are scanned
 def show_combine_button():
-    combine_button = tk.Button(scan_cards_frame, text="Cook!", command=check_combination)
-    combine_button.pack(side=TOP)
+    global combine_button_shown
+    if not combine_button_shown:
+        combine_button = tk.Button(scan_cards_frame, text="Cook!", command=check_combination)
+        combine_button.pack(side=TOP)
+        combine_button_shown = True
 
 # Check the combination to show results
 def check_combination():

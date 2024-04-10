@@ -130,14 +130,12 @@ def check_combination():
     for dish, ingredients in combinations.items():
         ingredient_set = set(ingredients)
         if ingredient_set == scanned_set:
-            # TODO: here should be the results frame + display the result
             scanned_cards.clear()
             found_valid_combination = True
             show_results(dish)
             break  # Exit the loop after finding a valid combination
 
     if not found_valid_combination and total_scanned >= 4:
-        # TODO: in case failed
         clear_button = tk.Button(scan_cards_frame, background=background_color, text="Clear", command=clear_ingredient,
                                 borderwidth=0).pack(pady=10)
         messagebox.showinfo("Result", "This combination doesn't work.")
@@ -194,7 +192,7 @@ landing_bg.pack()
 
 ## Game header for landing page
 title_image = tk.PhotoImage(file="final cards/header.png")
-title_label = tk.Label(main_screen, image=title_image)
+title_label = tk.Label(main_screen, image=title_image, background=background_color)
 title_label.place(relx=0.5, rely=0.3, anchor=CENTER)
 
 ## Buttons for main screen

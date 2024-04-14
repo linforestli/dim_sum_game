@@ -136,8 +136,9 @@ def check_combination():
 
         if not found_valid_combination:
             messagebox.showinfo("Result", "This combination doesn't work.")
-            clear_button = tk.Button(scan_cards_frame, background=background_color, text="Clear", command=clear_ingredient,
-                                    borderwidth=0).pack(pady=10)
+            clear_btn_img = PhotoImage(file='final cards/clear_button.png')
+            clear_button = Button(scan_cards_frame, image= clear_btn_img, command=clear_ingredient, borderwidth=0, background=background_color)
+            clear_button.place(relx=0.5, rely=0.6, anchor=CENTER)
             scanned_cards.clear()
     elif total_scanned > 4:
         messagebox.showinfo("Info", "Maximum limit of 4 cards reached. Please clear the current cards before scanning more.")

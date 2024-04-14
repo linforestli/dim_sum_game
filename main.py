@@ -97,7 +97,7 @@ def on_card_scanned(card_data):
 
 # Update card photo when scanned
 def update_frame_with_scan(card_data):
-    if card_data in icon_map:
+    if card_data in icon_map and len(scanned_cards) <= 4:
         icon_path = icon_map[card_data]
         icon = tk.PhotoImage(file=icon_path)
         icon_resized = icon.subsample(2, 2)

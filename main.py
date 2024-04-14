@@ -92,7 +92,7 @@ def on_card_scanned(card_data):
         return
     scanned_cards.append(card_data)
     update_frame_with_scan(card_data)
-    if len(scanned_cards) >= 4:
+    if len(scanned_cards) >= 0:
         show_combine_button()
 
 # Update card photo when scanned
@@ -119,29 +119,29 @@ def check_combination():
     total_scanned = len(scanned_cards)
 
     if total_scanned < 3:
+        messagebox.showinfo("Info", "Not enough cards, please scan more")
         return
-    elif total_scanned > 4:
-        messagebox.showinfo("Info", "Too many cards scanned, resetting...")
-        clear_button = tk.Button(scan_cards_frame, background=background_color, text="Clear", command=clear_ingredient,
-                                borderwidth=0).pack(pady=10)
-        scanned_cards.clear()
-        return
+    elif total_scanned == 4:
+        scanned_set = set(scanned_cards)
+        found_valid_combination = False
 
-    scanned_set = set(scanned_cards)
-    found_valid_combination = False
+        for dish, ingredients in combinations.items():
+            ingredient_set = set(ingredients)
+            if ingredient_set == scanned_set:
+                scanned_cards.clear()
+                found_valid_combination = True
+                show_results(dish)
+                break  # Exit the loop after finding a valid combination
 
-    for dish, ingredients in combinations.items():
-        ingredient_set = set(ingredients)
-        if ingredient_set == scanned_set:
+        if not found_valid_combination:
+            messagebox.showinfo("Result", "This combination doesn't work.")
+            clear_button = tk.Button(scan_cards_frame, background=background_color, text="Clear", command=clear_ingredient,
+                                    borderwidth=0).pack(pady=10)
             scanned_cards.clear()
-            found_valid_combination = True
-            show_results(dish)
-            break  # Exit the loop after finding a valid combination
+    elif total_scanned > 4:
+        messagebox.showinfo("Info", "Maximum limit of 4 cards reached. Please clear the current cards before scanning more.")
+        return
 
-    if not found_valid_combination and total_scanned >= 4:
-        clear_button = tk.Button(scan_cards_frame, background=background_color, text="Clear", command=clear_ingredient,
-                                borderwidth=0).pack(pady=10)
-        messagebox.showinfo("Result", "This combination doesn't work.")
 
 
 def clear_ingredient():

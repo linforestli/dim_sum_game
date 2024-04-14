@@ -58,7 +58,6 @@ def show_combine_button():
     combine_button.pack()
 
 def check_combination():
-    # Simple combination logic (replace with your own logic)
     if set(scanned_cards) == {"bambooshoot", "shrimp", "steam"}:
         result_label = tk.Label(scan_popup, text="You've made a Har Gow!")
         result_label.pack()

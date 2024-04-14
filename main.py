@@ -139,7 +139,6 @@ def check_combination():
             break  # Exit the loop after finding a valid combination
 
     if not found_valid_combination and total_scanned >= 4:
-        # TODO: in case failed
         clear_button = tk.Button(scan_cards_frame, background=background_color, text="Clear", command=clear_ingredient,
                                 borderwidth=0).pack(pady=10)
         messagebox.showinfo("Result", "This combination doesn't work.")

@@ -8,12 +8,12 @@ import json
 ser = serial.Serial('/dev/cu.usbmodem2101', 9600, timeout=1)
 
 ingredient_map = {}
-with open('data/encoded-rfid_cards.csv', mode='r', encoding='utf-8') as infile:
+with open('../data/encoded-rfid_cards.csv', mode='r', encoding='utf-8') as infile:
     reader = csv.reader(infile)
     ingredient_map = {rows[0].upper(): rows[1] for rows in reader}  # Ensure keys are uppercase
 
 # Load combinations from JSON
-with open('data/combinations.json', 'r') as json_file:
+with open('../data/combinations.json', 'r') as json_file:
     combinations = json.load(json_file)
 
 scanned_cards = []

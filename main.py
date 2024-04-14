@@ -109,9 +109,9 @@ def update_frame_with_scan(card_data):
 def show_combine_button():
     global combine_button_shown
     if not combine_button_shown:
-        combine_btn_img = PhotoImage(file='final cards/cook_button.png')
-        combine_button = Button(scan_cards_frame, command=check_combination, image=combine_btn_img, borderwidth=0, background=background_color)
-        combine_button.pack(side=TOP)
+        #combine_btn_img = PhotoImage(file='final cards/cook_button.png')
+        combine_button = tk.Button(scan_cards_frame, command=check_combination, borderwidth=0, background=background_color)
+        combine_button.pack(pady=10, side=TOP)
         combine_button_shown = True
 
 # Check the combination to show results

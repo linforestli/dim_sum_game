@@ -57,6 +57,7 @@ def open_scan_cards():
     results_frame.pack_forget()
     scan_cards_frame.pack()
     start_scan()
+    clear_result_story()
 
 def back_to_home_confirm():
     result = messagebox.askquestion("Confirmation", "Are you sure you want to go back to home?")
@@ -92,7 +93,7 @@ def on_card_scanned(card_data):
         return
     scanned_cards.append(card_data)
     update_frame_with_scan(card_data)
-    if len(scanned_cards) >= 4:
+    if len(scanned_cards) >= 0:
         show_combine_button()
 
 # Update card photo when scanned
@@ -104,6 +105,8 @@ def update_frame_with_scan(card_data):
         label = tk.Label(cards_box, image=icon_resized, background=background_color)
         label.image = icon_resized
         label.pack(side=LEFT)
+    elif len(scanned_cards) > 4:
+        messagebox.showinfo("Info", "Maximum limit of 4 cards reached. Please clear the current cards before scanning more.")
 
 # Show combine button when all ingredients are scanned
 def show_combine_button():
@@ -113,7 +116,7 @@ def show_combine_button():
         combine_btn_img = PhotoImage(file='final cards/cook_button.png')
         combine_button = tk.Button(scan_cards_frame, command=check_combination, image=combine_btn_img, borderwidth=0)
         combine_button.image = combine_btn_img
-        combine_button.pack(side=LEFT)
+        combine_button.pack()
 
 # Check the combination to show results
 def check_combination():
@@ -123,7 +126,7 @@ def check_combination():
     if total_scanned < 3:
         messagebox.showinfo("Info", "Not enough cards, please scan more")
         return
-    elif total_scanned == 4:
+    elif total_scanned == 3 or total_scanned == 4:
         scanned_set = set(scanned_cards)
         found_valid_combination = False
 
@@ -142,8 +145,6 @@ def check_combination():
         messagebox.showinfo("Info", "Maximum limit of 4 cards reached. Please clear the current cards before scanning more.")
         return
 
-
-
 def clear_ingredient():
     scanned_cards.clear()
     for widget in cards_box.winfo_children():
@@ -154,6 +155,10 @@ def start_scan():
     clear_ingredient()  # Reset scanned cards
     check_queue()
 
+def clear_result_story():
+    for widget in results_story_box.winfo_children():
+        widget.destroy()
+
 # Show results
 def show_results(dish):
     scan_cards_frame.pack_forget()
@@ -162,8 +167,8 @@ def show_results(dish):
         if food == dish:
             dish_story = story_map[food]
 
-    story_label = tk.Label(results_frame, text=dish_story, wraplength=800, font=("Roboto", "16"), background=background_color)
-    story_label.place(relx=0.5, rely=0.3, anchor=CENTER)
+    story_label = tk.Label(results_story_box, text=dish_story, wraplength=800, font=("Roboto", "16"), background=background_color)
+    story_label.pack()
     
     for food in icon_map:
         if food == dish:
@@ -249,7 +254,7 @@ continue_button.pack(anchor=CENTER)
 # Initiate scan cards frame
 scan_cards_frame = tk.Frame(window, background=background_color)
 scan_cards_frame.pack(padx=10, pady=10)
-scan_cards_label = tk.Label(scan_cards_frame, text="Tap to scan", wraplength=250, font=("Roboto", "24"), background=background_color).pack(pady=10)
+scan_cards_label = tk.Label(scan_cards_frame, text="Choose a protein, carb and/or vegetable of your choice, then a cooking method", wraplength=800, font=("Roboto", "24"), background=background_color).pack(pady=10)
 
 cards_box = tk.Frame(scan_cards_frame, background=background_color)
 cards_box.pack(padx=10, pady=10)
@@ -257,7 +262,7 @@ cards_box.pack(padx=10, pady=10)
 clear_btn_img = PhotoImage(file='final cards/clear_button.png')
 clear_button = Button(scan_cards_frame, command=clear_ingredient, image=clear_btn_img, borderwidth=0, background=background_color)
 clear_button.image = clear_btn_img
-clear_button.pack(side=LEFT)
+clear_button.pack()
 
 # Initiate results frame
 results_frame = tk.Frame(window, background=background_color)
@@ -268,11 +273,14 @@ results_bg_img = tk.PhotoImage(file='final cards/results_background.png')
 results_bg = tk.Label(results_frame, image=results_bg_img)
 results_bg.pack()
 
-continue_button = tk.Button(results_frame, text="Continue", command=open_scan_cards, image=continue_btn_img)
+results_story_box = tk.Frame(results_frame, background=background_color)
+results_story_box.place(relx=0.5, rely=0.2, anchor=CENTER)
+
+continue_button = tk.Button(results_frame, text="Continue", command=open_scan_cards, image=continue_btn_img, borderwidth=0, background=background_color)
 continue_button.place(relx=0.5, rely=0.8, anchor=CENTER)
 
 backhome_btn_img = PhotoImage(file='final cards/back_home_button.png')
-backhome_button = tk.Button(results_frame, text="Back", command=back_to_home_confirm, image=backhome_btn_img)
+backhome_button = tk.Button(results_frame, text="Back", command=back_to_home_confirm, image=backhome_btn_img, borderwidth=0, background=background_color)
 backhome_button.place(relx=0.5, rely=0.9, anchor=CENTER)
 
 # Start listening for card scans in a separate thread

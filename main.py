@@ -113,7 +113,7 @@ def show_combine_button():
         combine_btn_img = PhotoImage(file='final cards/cook_button.png')
         combine_button = tk.Button(scan_cards_frame, command=check_combination, image=combine_btn_img, borderwidth=0)
         combine_button.image = combine_btn_img
-        combine_button.pack()
+        combine_button.pack(side=LEFT)
 
 # Check the combination to show results
 def check_combination():
@@ -148,8 +148,6 @@ def clear_ingredient():
     scanned_cards.clear()
     for widget in cards_box.winfo_children():
         widget.destroy()
-
-
 
 def start_scan():
     global scanned_cards, scan_popup
@@ -255,10 +253,11 @@ scan_cards_label = tk.Label(scan_cards_frame, text="Tap to scan", wraplength=250
 
 cards_box = tk.Frame(scan_cards_frame, background=background_color)
 cards_box.pack(padx=10, pady=10)
-clear_btn_img = PhotoImage(file='final cards/clear_button.png')
-clear_button = Button(scan_cards_frame, command=clear_ingredient, text='Clear', borderwidth=0, background=background_color)
-clear_button.pack()
 
+clear_btn_img = PhotoImage(file='final cards/clear_button.png')
+clear_button = Button(scan_cards_frame, command=clear_ingredient, image=clear_btn_img, borderwidth=0, background=background_color)
+clear_button.image = clear_btn_img
+clear_button.pack(side=LEFT)
 
 # Initiate results frame
 results_frame = tk.Frame(window, background=background_color)

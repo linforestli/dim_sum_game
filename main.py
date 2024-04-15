@@ -92,7 +92,7 @@ def on_card_scanned(card_data):
         return
     scanned_cards.append(card_data)
     update_frame_with_scan(card_data)
-    if len(scanned_cards) >= 0:
+    if len(scanned_cards) >= 4:
         show_combine_button()
 
 # Update card photo when scanned
@@ -109,10 +109,10 @@ def update_frame_with_scan(card_data):
 def show_combine_button():
     global combine_button_shown
     if not combine_button_shown:
-        #combine_btn_img = PhotoImage(file='final cards/cook_button.png')
-        combine_button = tk.Button(scan_cards_frame, command=check_combination, borderwidth=0, background=background_color)
-        combine_button.pack(pady=10, side=TOP)
         combine_button_shown = True
+        #combine_btn_img = PhotoImage(file='final cards/cook_button.png')
+        combine_button = tk.Button(scan_cards_frame, command=check_combination, text='Cook', borderwidth=0)
+        combine_button.place(relx=0.5, rely=0.9, anchor=CENTER)
 
 # Check the combination to show results
 def check_combination():
@@ -137,8 +137,8 @@ def check_combination():
         if not found_valid_combination:
             messagebox.showinfo("Result", "This combination doesn't work.")
             clear_btn_img = PhotoImage(file='final cards/clear_button.png')
-            clear_button = Button(scan_cards_frame, image= clear_btn_img, command=clear_ingredient, borderwidth=0, background=background_color)
-            clear_button.place(relx=0.5, rely=0.6, anchor=CENTER)
+            clear_button = Button(scan_cards_frame, command=clear_ingredient, text='Clear', borderwidth=0, background=background_color)
+            clear_button.pack()
             scanned_cards.clear()
     elif total_scanned > 4:
         messagebox.showinfo("Info", "Maximum limit of 4 cards reached. Please clear the current cards before scanning more.")
